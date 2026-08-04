@@ -1,0 +1,85 @@
+{% extends 'admission/partials/base.html' %}
+{% load static %}
+
+{% block title %}Crash Course | EduThanzeel{% endblock %}
+
+{% block content %}
+<section class="welcome-three home-welcome-section"
+   style="padding: 70px 0;background-color: #fff9df;border-bottom: none!important;">
+   <div class="container">
+      <div class="row clearfix">
+         <h1 class="headings" data-aos="fade-up" data-aos-delay="100">
+            Course Overview : Crash Course
+         </h1>
+         <p class="cd-intro">"When an exam feels like a mountain, your child needs more than just a book they need a breakthrough."</p>
+         <div class="welcome-three_content-column col-lg-7 text-start mt-5" data-aos="fade-up">
+            <div class="welcome-three_content-outer">
+               <p class="cd-desc-text">At EduThanzeel, we believe in the power of capsulized learning, where
+                  short, high-impact sessions turn exam anxiety into "Top Plus" results. Your child's journey is
+                  personal, which is why we offer intimate one-to-one training or focus batches limited to only
+                  six students. We leave nothing to chance, equipping them with curated study materials,
+                  previous-year question analysis, and a rigorous cycle of weekly assessments and mock tests. This
+                  isn't just about the grade; it's about the pride of achievement, which we celebrate through
+                  separate Excellence Awards for both students and parents. Let them do more than just pass; let
+                  them soar with confidence. Support their dreams today by joining our crash course and watching
+                  them go beyond the top.</p>
+            </div>
+         </div>
+
+         <div class="welcome-three_image-column col-lg-5 mt-5" data-aos="fade-left">
+            <div class="welcome-three_image-outer">
+               <div class="welcome-three_color-box"></div>
+               <div class="welcome-three_image">
+                  <img src="{% static 'admission/images/crash.png' %}" alt="Crash Course">
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <div class="cd-grid">
+            <div class="cd-card">
+               <div class="cd-card-label">
+                  <svg viewBox="0 0 24 24">
+                     <circle cx="12" cy="12" r="10" />
+                     <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  Goal
+               </div>
+               <p>To boost confidence and secure top results.</p>
+            </div>
+            <div class="cd-card">
+               <div class="cd-card-label">
+                  <svg viewBox="0 0 24 24">
+                     <circle cx="12" cy="12" r="3" />
+                     <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                     <path d="M4.93 4.93a10 10 0 0 0 0 14.14" />
+                  </svg>
+                  Focus
+               </div>
+               <p>Intensive, exam-focused preparation with targeted practice and question analysis.</p>
+            </div>
+            <div class="cd-card full">
+               <div class="cd-card-label">
+                  <svg viewBox="0 0 24 24">
+                     <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  </svg>
+                  The Experience
+               </div>
+               <p>One-to-one or small-batch training (max six students), with curated materials, weekly tests, and
+                  mock exams backed by performance recognition.</p>
+            </div>
+         </div>
+         <div>
+            <a href="{% url 'register' %}?course=crash" class="cd-btn">
+               <svg viewBox="0 0 24 24">
+                  <path d="M5 12h14" />
+                  <path d="M12 5l7 7-7 7" />
+               </svg>
+               Apply Now
+            </a>
+         </div>
+      </div>
+   </div>
+</section>
+{% endblock %}

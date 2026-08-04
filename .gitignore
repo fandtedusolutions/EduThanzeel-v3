@@ -1,0 +1,20 @@
+# Environments
+venv/
+.venv/
+env/
+.env/
+
+# Database
+db.sqlite3
+*.sqlite3
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Media files
+media/
+
+# Static files (collected)
+staticfiles/

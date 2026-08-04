@@ -1,0 +1,89 @@
+{% extends 'manager/admin_base.html' %}
+{% load static %}
+
+{% block title %}Events{% endblock %}
+{% block page_title %}Events{% endblock %}
+{% block page_sub %}Schedule and manage upcoming events{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+
+    <!-- Add Event Form -->
+    <div class="col-lg-4">
+        <div class="glass-card">
+            <h5><i class="fa-solid fa-calendar-star me-2" style="color: #6ee7b7;"></i>Add New Event</h5>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Event Title</label>
+                    <input type="text" name="title" class="form-control" placeholder="Ramadan Event 2026" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Event Date (Optional)</label>
+                    <input type="date" name="date" class="form-control">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Event Poster</label>
+                    <div id="eventPreview" class="image-preview-container"></div>
+                    <input type="file" name="image" id="id_event_image" class="form-control" accept="image/*" required>
+                </div>
+                <button type="submit" class="stat-card-btn w-100">
+                    <i class="fa-solid fa-calendar-plus me-2"></i>Post Event
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Events Grid -->
+    <div class="col-lg-8">
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="fa-solid fa-calendar-star me-2" style="color: #6ee7b7;"></i>All Events</h5>
+                <a href="{% url 'recycle_bin_events' %}" class="btn-recycle-bin">
+                    <i class="fa-solid fa-trash-arrow-up me-2"></i>Recycle Bin
+                </a>
+            </div>
+            <div class="row g-3">
+                {% for event in events %}
+                <div class="col-md-6 col-xl-4">
+                    <div class="media-card">
+                        {% if event.image %}
+                            <img src="{{ event.image.url }}" class="media-thumb" alt="{{ event.title }}">
+                        {% else %}
+                            <div class="thumb-placeholder"><i class="fa-solid fa-calendar-star"></i></div>
+                        {% endif %}
+                        <div class="media-body">
+                            <div class="media-title">{{ event.title }}</div>
+                            <div class="media-meta">
+                                {% if event.date %}{{ event.date|date:"F d, Y" }}{% else %}Date TBD{% endif %}
+                            </div>
+                            <div class="media-actions">
+                                <a href="{% url 'edit_event' event.pk %}" class="btn-action-edit">
+                                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                                </a>
+                                <a href="{% url 'soft_delete_event' event.pk %}" class="btn-action-delete" title="Move to Recycle Bin">
+                                    <i class="fa-solid fa-trash-can"></i> Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert-glass">
+                        <i class="fa-solid fa-calendar-star fa-2x mb-3" style="color: rgba(255,255,255,0.2); display:block;"></i>
+                        No events yet. Schedule your first event!
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setupImagePreview('id_event_image', 'eventPreview');
+    });
+</script>
+{% endblock %}

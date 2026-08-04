@@ -1,0 +1,198 @@
+{% extends 'admission/partials/base.html' %}
+{% load static %}
+
+{% block title %}Contact | EduThanzeel{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}
+
+{% block content %}
+<section class="inner-page-section inner-page-section-light">
+  <div class="cs-section">
+    <div class="row">
+      <h1 class="headings text-center mb-5" data-aos="fade-up" data-aos-delay="100">
+        Contact Us
+      </h1>
+    </div>
+    <div class="cs-wrap">
+      <!-- LEFT: Visual / Info Panel -->
+      <div class="cs-left">
+        <div class="cs-circle-1"></div>
+        <div class="cs-circle-2"></div>
+        <div class="cs-circle-3"></div>
+        <div class="cs-blob"></div>
+        <svg class="cs-dot-grid" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="1.5" fill="#f44485"/>
+          </pattern>
+          <rect width="200" height="200" fill="url(#dots)"/>
+        </svg>
+
+        <div>
+          <h2 class="cs-title">Let's start a<br><em>conversation</em></h2>
+          <p class="cs-desc">Have questions about courses, timings, or enrollment? Our support team is here to help you every step of the way.</p>
+        </div>
+
+        <div>
+     <ul class="cs-info-list">
+  <li class="cs-info-item">
+    <div class="cs-icon-wrap">
+      <svg viewBox="0 0 24 24">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+    </div>
+    <div class="cs-info-text">
+      <span class="cs-info-label">Email</span>
+      <span class="cs-info-value">eduthanzeel@gmail.com</span>
+    </div>
+  </li>
+
+  <li class="cs-info-item">
+    <div class="cs-icon-wrap">
+      <svg viewBox="0 0 24 24">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.5 2 2 0 0 1 3.58 1.5h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.06a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+      </svg>
+    </div>
+    <div class="cs-info-text">
+      <span class="cs-info-label">Phone</span>
+      <span class="cs-info-value">+91 92076 66634</span>
+    </div>
+  </li>
+
+  <li class="cs-info-item">
+    <div class="cs-icon-wrap">
+      <svg viewBox="0 0 24 24">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+        <circle cx="12" cy="10" r="3"/>
+      </svg>
+    </div>
+    <div class="cs-info-text">
+      <span class="cs-info-label">Locations</span>
+      <span class="cs-info-value">
+        Delhi |
+Kochi |
+Malappuram
+      </span>
+    </div>
+  </li>
+</ul>
+          <div class="cs-divider"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Form Panel -->
+      <div class="cs-right">
+        <p class="cs-form-tag">Send a message</p>
+        <h3 class="cs-form-title">We'd love to hear<br>from you</h3>
+        <p class="cs-form-sub">Fill in the form and we'll get back to you within 24 hours.</p>
+        <div class="cs-form-grid">
+          <div class="cs-field">
+            <label>Your name <span class="required-star">*</span></label>
+            <input type="text" id="contact-name" placeholder="" required>
+          </div>
+          <div class="cs-field">
+            <label>Email address <span class="required-star">*</span></label>
+            <input type="email" id="contact-email" placeholder="" required>
+          </div>
+          <div class="cs-field">
+            <label>Phone number <span class="required-star">*</span></label>
+            <input type="text" id="contact-phone" placeholder="" required>
+          </div>
+        <div class="cs-field">
+  <label>Course <span class="required-star">*</span></label>
+  <div class="cs-select-wrap" style="position: relative; display: block;">
+    <select id="contact-course" style="background: #f7f7f9; appearance: none; -webkit-appearance: none; padding-right: 40px; width: 100%;" required>
+      <option value="">Select a course</option>
+      <option value="basics">Basics</option>
+      <option value="bayan">Bayan</option>
+      <option value="nuzul">Nuzul</option>
+      <option value="hifz">Hifz</option>
+      <option value="crash-course">Crash Course</option>
+    </select>
+    <span class="cs-select-arrow" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; display: flex; align-items: center; line-height: 1;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;min-width:16px;min-height:16px;display:block;"><polyline points="6 9 12 15 18 9"/></svg>
+    </span>
+  </div>
+</div>
+          <div class="cs-field full">
+            <label>Message <span class="required-star">*</span></label>
+            <textarea id="contact-message" placeholder="" required></textarea>
+          </div>
+          <button type="button" onclick="submitContact()" class="cs-btn">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Send Message
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+async function submitContact() {
+  const name = document.getElementById('contact-name').value.trim();
+  const email = document.getElementById('contact-email').value.trim();
+  const phone = document.getElementById('contact-phone').value.trim();
+  const course = document.getElementById('contact-course').value;
+  const message = document.getElementById('contact-message').value.trim();
+
+  if (!name || !email || !phone || !course || !message) {
+    Swal.fire({
+      title: 'Missing Fields',
+      text: 'Please fill in all required fields.',
+      icon: 'warning',
+      confirmButtonColor: '#76258E'
+    });
+    return;
+  }
+
+  const data = {
+    full_name: name,
+    email: email || null,
+    phone_number: phone,
+    course_interest: course || null,
+    message: message
+  };
+
+  try {
+    const response = await fetch('/api/contact/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+      Swal.fire({
+        title: 'Thank You For Reaching Us!',
+        text: 'We will connect you soon!',
+        icon: 'success',
+        confirmButtonColor: '#76258E'
+      }).then(() => { window.location.reload(); });
+    } else {
+      const errData = await response.json();
+      Swal.fire({
+        title: 'Submission Failed',
+        text: 'Error: ' + JSON.stringify(errData),
+        icon: 'error',
+        confirmButtonColor: '#76258E'
+      });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    Swal.fire({
+      title: 'Something Went Wrong',
+      text: 'An error occurred. Please try again.',
+      icon: 'error',
+      confirmButtonColor: '#76258E'
+    });
+  }
+}
+</script>
+{% endblock %}

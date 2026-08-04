@@ -1,0 +1,109 @@
+{% extends 'manager/admin_base.html' %}
+{% load static %}
+
+{% block title %}Manage Notifications{% endblock %}
+{% block page_title %}Notifications{% endblock %}
+{% block page_sub %}Manage the scrolling marquee text on the home page.{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <!-- Add Notification Form -->
+    <div class="col-lg-4">
+        <div class="chart-panel">
+            <div class="chart-panel-title">
+                <span
+                    style="background:rgba(212, 154, 185, 0.2);color:var(--accent);width:34px;height:34px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;">
+                    <i class="fa-solid fa-plus"></i>
+                </span>
+                Add Notification
+            </div>
+            <form action="{% url 'admin_notifications' %}" method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Notification Text</label>
+                    <input type="text" name="text" class="form-control"
+                        placeholder="e.g. Upcoming Batches Admissions are open" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Optional Link (URL)</label>
+                    <input type="url" name="link" class="form-control" placeholder="https://wa.me/...">
+                </div>
+                <button type="submit" class="btn-glass-primary w-100">Add Notification</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notifications List -->
+    <div class="col-lg-8">
+        <div class="prem-table-wrap">
+            <div class="chart-panel-title">
+                <span
+                    style="background:rgba(139,92,246,0.2);color:#c4b5fd;width:34px;height:34px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;">
+                    <i class="fa-solid fa-bell"></i>
+                </span>
+                Current Notifications
+            </div>
+            <div class="table-responsive">
+                <table class="table prem-table">
+                    <thead>
+                        <tr>
+                            <th
+                                style="color:rgba(167,139,250,0.8);font-size:0.72rem;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid rgba(167,139,250,0.2);padding-bottom:12px;">
+                                Text</th>
+                            <th
+                                style="color:rgba(167,139,250,0.8);font-size:0.72rem;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid rgba(167,139,250,0.2);padding-bottom:12px;">
+                                Status</th>
+                            <th
+                                style="color:rgba(167,139,250,0.8);font-size:0.72rem;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid rgba(167,139,250,0.2);padding-bottom:12px;">
+                                Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for notif in notifications %}
+                        <tr>
+                            <td style="padding:14px 12px;">
+                                <div style="font-weight:700;color:#fff;font-size:0.9rem;">{{ notif.text }}</div>
+                                {% if notif.link %}
+                                <div style="color:rgba(255,255,255,0.4);font-size:0.78rem;">{{ notif.link|slice:":40"
+                                    }}{% if notif.link|length > 40 %}...{% endif %}</div>
+                                {% endif %}
+                            </td>
+                            <td style="padding:14px 12px;">
+                                {% if notif.is_active %}
+                                <span class="badge-received">Active</span>
+                                {% else %}
+                                <span class="badge-pending">Inactive</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding:14px 12px;">
+                                <div class="d-flex gap-2">
+                                    <a href="{% url 'toggle_notification' notif.pk %}" class="btn-action-icon"
+                                        title="Toggle Status">
+                                        <i
+                                            class="fa-solid {% if notif.is_active %}fa-eye-slash{% else %}fa-eye{% endif %}"></i>
+                                    </a>
+                                    <a href="{% url 'edit_notification' notif.pk %}" class="btn-action-icon"
+                                        title="Edit">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    <a href="{% url 'delete_notification' notif.pk %}" class="btn-action-icon"
+                                        title="Delete"
+                                        onclick="return confirm('Are you sure you want to delete this notification?')">
+                                        <i class="fa-solid fa-trash" style="color:#f87171;"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center py-5" style="color:rgba(255,255,255,0.2);">No
+                                notifications yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

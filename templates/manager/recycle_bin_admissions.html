@@ -1,0 +1,57 @@
+{% extends 'manager/admin_base.html' %}
+{% load static %}
+
+{% block title %}Recycle Bin | Admissions{% endblock %}
+{% block page_title %}Recycle Bin (Admissions){% endblock %}
+{% block page_sub %}Previously deleted student enrollment applications{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 style="margin:0;"><i class="fa-solid fa-trash-can me-2 text-danger"></i>Deleted Applications ({{ admissions|length }})</h5>
+        <a href="{% url 'admin_admissions' %}" class="back-btn">
+            <i class="fa-solid fa-arrow-left me-1"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Email</th>
+                    <th>Age & Gender</th>
+                    <th>Contact</th>
+                    <th>Course</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in admissions %}
+                <tr>
+                    <td><span style="font-weight: 700; color: #fff;">{{ app.first_name }} {{ app.last_name }}</span></td>
+                    <td>{{ app.email|default:"—" }}</td>
+                    <td>{{ app.age }} yrs / {{ app.gender|title }}</td>
+                    <td>{{ app.mobile_number }}</td>
+                    <td>{{ app.course|default:"—" }}</td>
+                    <td>{{ app.created_at|date:"M d, Y" }}</td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'restore_admission' app.pk %}" class="btn-action-icon" title="Restore to Inbox" style="padding: 4px 10px; font-size: 0.75rem;">
+                                <i class="fa-solid fa-trash-arrow-up"></i> <span class="ms-1">Restore</span>
+                            </a>
+                            <a href="{% url 'delete_admission_permanent' app.pk %}" class="btn-action-icon" title="Delete Permanently" onclick="return confirm('Are you sure you want to permanently delete this application?')" style="padding: 4px 10px; font-size: 0.75rem;">
+                                <i class="fa-solid fa-xmark"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="7" class="text-center py-5" style="color: rgba(255,255,255,0.3);">Recycle bin is empty.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

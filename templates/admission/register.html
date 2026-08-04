@@ -1,0 +1,188 @@
+{% extends 'admission/partials/base.html' %}
+{% load static %}
+
+{% block title %}Apply Now | EduThanzeel{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}
+
+{% block content %}
+<section style="padding: 120px 0;background-color: #fff9df;">
+   <div class="container">
+      <div class="row">
+         <h1 class="headings text-center mb-5" data-aos="fade-up" data-aos-delay="100">
+            Apply Now and<br> Get started
+         </h1>
+      </div>
+
+      <div class="row justify-content-center">
+         <div class="col-lg-6">
+            <div class="form-col">
+               <div class="field-row">
+                  <div class="field-group" style="margin-bottom:0">
+                     <label for="first-name">First name</label>
+                     <input type="text" id="first-name" />
+                  </div>
+                  <div class="field-group" style="margin-bottom:0">
+                     <label for="last-name">Last name</label>
+                     <input type="text" id="last-name" />
+                  </div>
+               </div>
+
+               <div class="field-group">
+                  <label for="gender">Gender</label>
+                  <div class="select-wrap">
+                     <select id="gender">
+                        <option value="" disabled selected>Select gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                     </select>
+                  </div>
+               </div>
+
+               <div class="field-group">
+                  <label for="age">Age</label>
+                  <div class="select-wrap">
+                     <select id="age">
+                        <option value="" disabled selected>Select age</option>
+                     </select>
+                  </div>
+               </div>
+
+               <div class="field-group">
+                  <label for="course">Interested Course</label>
+                  <div class="select-wrap">
+                     <select id="course">
+                        <option value="" disabled selected>Select course</option>
+                        <option value="alm">Basics</option>
+                        <option value="bayan">Bayan</option>
+                        <option value="nuzul">Nuzul</option>
+                        <option value="hifz">Hifz and Dawrah</option>
+                        <option value="crash">Crash Course</option>
+                        <option value="general">General Inquiry</option>
+                     </select>
+                  </div>
+               </div>
+
+               <div class="field-group">
+                  <label for="mobile">Mobile number</label>
+                  <div class="phone-wrap">
+                     <div class="select-wrap">
+                        <select id="country-code">
+                           <option value="+91">+91</option>
+                           <option value="+1">+1</option>
+                           <option value="+44">+44</option>
+                           <option value="+61">+61</option>
+                           <option value="+971">+971</option>
+                        </select>
+                     </div>
+                     <input type="tel" id="mobile" placeholder="98765 43210" maxlength="10" />
+                  </div>
+               </div>
+
+               <div class="field-group">
+                  <label for="email">Email address <span class="optional-tag">(optional)</span></label>
+                  <input type="email" id="email" />
+               </div>
+
+               <button class="submit-btn" type="button" onclick="handleSubmit()">Submit application</button>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+   // Populate age dropdown
+   const ageSelect = document.getElementById('age');
+   if (ageSelect) {
+      for (let i = 10; i <= 80; i++) {
+         const option = document.createElement('option');
+         option.value = i;
+         option.textContent = i;
+         ageSelect.appendChild(option);
+      }
+   }
+
+   document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const courseParam = urlParams.get('course');
+      if (courseParam) {
+         const courseSelect = document.getElementById('course');
+         if (courseSelect) {
+            courseSelect.value = courseParam;
+         }
+      }
+   });
+
+   async function handleSubmit() {
+      const firstName = document.getElementById('first-name').value.trim();
+      const lastName = document.getElementById('last-name').value.trim();
+      const gender = document.getElementById('gender').value;
+      const age = document.getElementById('age').value;
+      const course = document.getElementById('course').value;
+      const code = document.getElementById('country-code').value;
+      const mobile = document.getElementById('mobile').value;
+      const email = document.getElementById('email').value;
+
+      if (!firstName || !lastName || !gender || !age || !mobile || !course) {
+         Swal.fire({
+           title: 'Missing Fields',
+           text: 'Please fill in all required fields (First Name, Last Name, Gender, Age, Mobile, Course).',
+           icon: 'warning',
+           confirmButtonColor: '#76258E'
+         });
+         return;
+      }
+
+      const data = {
+         first_name: firstName,
+         last_name: lastName,
+         gender: gender,
+         age: parseInt(age),
+         mobile_number: `${code} ${mobile}`,
+         email: email || null,
+         course: course
+      };
+      
+      try {
+         const response = await fetch('/api/admission/', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+               'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify(data)
+         });
+
+         if (response.ok) {
+            Swal.fire({
+              title: 'Thank You For Reaching Us!',
+              text: 'We will connect you soon!',
+              icon: 'success',
+              confirmButtonColor: '#76258E'
+            }).then(() => { window.location.reload(); });
+         } else {
+            const errData = await response.json();
+            Swal.fire({
+              title: 'Submission Failed',
+              text: 'Error: ' + JSON.stringify(errData),
+              icon: 'error',
+              confirmButtonColor: '#76258E'
+            });
+         }
+      } catch (error) {
+         console.error('Error:', error);
+         Swal.fire({
+           title: 'Something Went Wrong',
+           text: 'An error occurred. Please try again.',
+           icon: 'error',
+           confirmButtonColor: '#76258E'
+         });
+      }
+   }
+</script>
+{% endblock %}

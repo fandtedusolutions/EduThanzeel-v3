@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <title>{% block title %}EduThanzeel{% endblock %}</title>
+   <link rel="icon" type="image/webp" href="{% static 'admission/images/favicon.webp' %}">
+
+   <meta name="google-site-verification" content="4meJFyZqwlKNpxZRnJqS7oCxNAXl3N1mSIS3auufYek" />
+   <link href="{% static 'admission/css/bootstrap.css' %}" rel="stylesheet">
+   <link href="{% static 'admission/css/style.css' %}" rel="stylesheet">
+   <link href="{% static 'admission/css/responsive.css' %}" rel="stylesheet">
+   <link href="{% static 'admission/css/flaticon_afbd3404a2e1104832d0.css' %}" rel="stylesheet">
+
+   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"> 
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet">
+   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
+
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+
+   {% block extra_head %}{% endblock %}
+   {% block extra_css %}{% endblock %}
+</head>
+
+
+<body>
+
+   <div class="page-wrapper">
+
+      {% include 'admission/partials/header.html' %}
+
+      {% block content %}{% endblock %}
+
+      {% include 'admission/partials/footer.html' %}
+
+   </div>
+
+   <script src="{% static 'admission/js/jquery.js' %}"></script>
+   <script src="{% static 'admission/js/popper.min.js' %}"></script>
+   <script src="{% static 'admission/js/bootstrap.min.js' %}"></script>
+   <script src="{% static 'admission/js/appear.js' %}"></script>
+   <script src="{% static 'admission/js/parallax.min.js' %}"></script>
+   <script src="{% static 'admission/js/tilt.jquery.min.js' %}"></script>
+   <script src="{% static 'admission/js/jquery.paroller.min.js' %}"></script>
+   <script src="{% static 'admission/js/wow.js' %}"></script>
+   <script src="{% static 'admission/js/jarallax.js' %}"></script>
+   <script src="{% static 'admission/js/swiper.min.js' %}"></script>
+   <script src="{% static 'admission/js/backtotop.js' %}"></script>
+   <script src="{% static 'admission/js/odometer.js' %}"></script>
+   <script src="{% static 'admission/js/parallax-scroll.js' %}"></script>
+
+   <script src="{% static 'admission/js/gsap.min.js' %}"></script>
+   <script src="{% static 'admission/js/SplitText.min.js' %}"></script>
+   <script src="{% static 'admission/js/ScrollTrigger.min.js' %}"></script>
+   <script src="{% static 'admission/js/ScrollToPlugin.min.js' %}"></script>
+   <script src="{% static 'admission/js/ScrollSmoother.min.js' %}"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+
+   <script src="{% static 'admission/js/magnific-popup.min.js' %}"></script>
+   <script src="{% static 'admission/js/nav-tool.js' %}"></script>
+   <script src="{% static 'admission/js/jquery-ui.js' %}"></script>
+   <script src="{% static 'admission/js/element-in-view.js' %}"></script>
+   <script src="{% static 'admission/js/script.js' %}"></script>
+   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+   {% block extra_js %}{% endblock %}
+
+   <script>
+      AOS.init({
+         duration: 1000,
+         once: true
+      });
+   </script>
+
+   <a href="https://wa.me/919207666634" class="whatsapp-float" target="_blank" rel="noopener"
+      aria-label="Chat on WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+from django.contrib import admin
+from .models import AdmissionApplication, ContactInquiry, Achievement, Event
+
+@admin.register(AdmissionApplication)
+class AdmissionApplicationAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'course', 'mobile_number', 'created_at')
+    list_filter = ('gender', 'age', 'course', 'created_at')
+    search_fields = ('first_name', 'last_name', 'mobile_number', 'email', 'course')
+
+@admin.register(ContactInquiry)
+class ContactInquiryAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'course_interest', 'phone_number', 'created_at')
+    list_filter = ('course_interest', 'created_at')
+    search_fields = ('full_name', 'email', 'phone_number', 'message', 'course_interest')
+
+@admin.register(Achievement)
+class AchievementAdmin(admin.ModelAdmin):
+    list_display = ('title', 'created_at')
+    search_fields = ('title',)
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date', 'created_at')
+    list_filter = ('date', 'created_at')
+    search_fields = ('title',)

@@ -1,0 +1,174 @@
+{% extends 'admission/partials/base.html' %}
+{% load static %}
+
+{% block title %}Gallery | EduThanzeel{% endblock %}
+
+{% block content %}
+<section class="welcome-three home-welcome-section" style="padding: 70px 0;background-color: #fff9df;">
+   <div class="container">
+      <div class="row clearfix">
+         <div class="welcome-three_content-column col-lg-6 text-start mt-5" data-aos="fade-up">
+            <div class="welcome-three_content-outer">
+               <h1 class="headings" data-aos="fade-up" data-aos-delay="100">
+                  Explore Our Gallery<br> Moments That Inspire
+               </h1>
+               <p>
+                  Take a glimpse into our journey through photos that capture learning, community activities, and memorable moments from our programs and events.
+               </p>
+            </div>
+         </div>
+         <div class="col-lg-2" data-aos="fade-right">
+            <img src="{% static 'admission/images/musalla-vec.png' %}" alt="Musalla">
+         </div>
+         <div class="welcome-three_image-column col-lg-4 mb-5" data-aos="fade-left">
+            <div class="welcome-three_image-outer">
+               <div class="welcome-three_color-box"></div>
+               <div class="welcome-three_image">
+                  <img src="{% static 'admission/images/gallery.png' %}" alt="Gallery">
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+
+<section class="placements-section" style="background-color: #fff9df;">
+   <div class="container">
+      <h1 class="headings mb-5 text-center" data-aos="fade-up" data-aos-delay="100">
+         Achievements
+      </h1>
+      <div class="placements-slider-wrapper">
+         <div class="swiper placementsSwiper">
+            <div class="swiper-wrapper">
+               {% for achievement in achievements %}
+               <div class="swiper-slide">
+                  <div class="placement-card">
+                     <div class="placement-image-full">
+                        <img src="{{ achievement.image.url }}" alt="{{ achievement.title }}" loading="lazy">
+                     </div>
+                  </div>
+               </div>
+               {% empty %}
+               <div class="swiper-slide text-center py-5 w-100" style="color: rgba(0,0,0,0.3);">
+                  <p>No achievements added yet.</p>
+               </div>
+               {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+         </div>
+      </div>
+   </div>
+</section>
+
+<section class="events-section">
+   <div class="container">
+      <h1 class="headings mb-5 text-center" data-aos="fade-up" data-aos-delay="100">
+         Events
+      </h1>
+
+      <div class="insta-feed">
+         {% for event in events %}
+         <div class="insta-card">
+            <div class="insta-image-wrap">
+               <img src="{{ event.image.url }}" alt="{{ event.title }}" class="insta-img">
+            </div>
+            <div class="insta-actions">
+               <button class="action-btn like-btn" onclick="toggleLike(this)">
+                  <svg viewBox="0 0 24 24" class="icon">
+                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                  </svg>
+               </button>
+               <button class="action-btn">
+                  <svg viewBox="0 0 24 24" class="icon">
+                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                  </svg>
+               </button>
+               <button class="action-btn">
+                  <svg viewBox="0 0 24 24" class="icon">
+                     <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+                  </svg>
+               </button>
+               <button class="action-btn save-btn" style="margin-left:auto" onclick="toggleSave(this)">
+                  <svg viewBox="0 0 24 24" class="icon">
+                     <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                  </svg>
+               </button>
+            </div>
+            <div class="insta-footer">
+               <span class="likes-count">{{ event.title }}</span>
+               <span class="time-ago">{{ event.date|default:"Recent"|date:"M d, Y"|upper }}</span>
+            </div>
+         </div>
+         {% empty %}
+         <div class="text-center py-5 w-100" style="color: rgba(0,0,0,0.3);">
+            <p>No events added yet.</p>
+         </div>
+         {% endfor %}
+      </div>
+
+      <div class="insta-cta">
+         <div class="cta-inner">
+            <div class="cta-ig-icon">
+               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="2" y="2" width="20" height="20" rx="6" ry="6" stroke="url(#igGrad)" stroke-width="2" />
+                  <circle cx="12" cy="12" r="4.5" stroke="url(#igGrad)" stroke-width="2" />
+                  <circle cx="17.5" cy="6.5" r="1.2" fill="url(#igGrad2)" />
+                  <defs>
+                     <linearGradient id="igGrad" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#f9c74f" />
+                        <stop offset="40%" stop-color="#f3722c" />
+                        <stop offset="70%" stop-color="#e1306c" />
+                        <stop offset="100%" stop-color="#833ab4" />
+                     </linearGradient>
+                     <linearGradient id="igGrad2" x1="0" y1="1" x2="1" y2="0" gradientUnits="objectBoundingBox">
+                        <stop offset="0%" stop-color="#e1306c" />
+                        <stop offset="100%" stop-color="#833ab4" />
+                     </linearGradient>
+                  </defs>
+               </svg>
+            </div>
+            <div class="cta-text">
+               <p class="cta-title">Get Updations through Instagram</p>
+               <p class="cta-sub">Follow us for live updates & behind-the-scenes</p>
+            </div>
+            <a href="https://www.instagram.com/eduthanzeel/" target="_blank" class="cta-btn">
+               See More
+               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+               </svg>
+            </a>
+         </div>
+      </div>
+   </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+   var placementSwiper = new Swiper(".placementsSwiper", {
+      slidesPerView: 3,
+      spaceBetween: 30,
+      loop: true,
+      speed: 5000,
+      autoplay: {
+         delay: 0,
+         disableOnInteraction: false
+      },
+      freeMode: true,
+      freeModeMomentum: false,
+      breakpoints: {
+         0: { slidesPerView: 1 },
+         768: { slidesPerView: 2 },
+         1024: { slidesPerView: 3 }
+      }
+   });
+
+   function toggleLike(btn) {
+      btn.classList.toggle('active');
+   }
+   function toggleSave(btn) {
+      btn.classList.toggle('active');
+   }
+</script>
+{% endblock %}

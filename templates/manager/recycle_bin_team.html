@@ -1,0 +1,55 @@
+{% extends 'manager/admin_base.html' %}
+{% load static %}
+
+{% block title %}Team Recycle Bin{% endblock %}
+{% block page_title %}Team Recycle Bin{% endblock %}
+{% block page_sub %}Restore or permanently delete team members{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{% url 'admin_team' %}" class="back-btn">
+        <i class="fa-solid fa-arrow-left me-2"></i>Back to Team Members
+    </a>
+</div>
+
+<div class="row g-4">
+    <div class="col-12">
+        <div class="table-container">
+            <h5 class="mb-3"><i class="fa-solid fa-trash-arrow-up me-2" style="color: #fca5a5;"></i>Deleted Team Members</h5>
+            
+            <div class="row g-3">
+                {% for member in team_list %}
+                <div class="col-md-4 col-xl-3">
+                    <div class="media-card" style="opacity: 0.8; filter: grayscale(50%);">
+                        {% if member.image %}
+                            <img src="{{ member.image.url }}" class="media-thumb" alt="{{ member.name }}" style="object-fit:cover; height: 180px;">
+                        {% else %}
+                            <div class="thumb-placeholder"><i class="fa-solid fa-user"></i></div>
+                        {% endif %}
+                        <div class="media-body">
+                            <div class="media-title">{{ member.name }}</div>
+                            <div class="media-meta">{{ member.role }}</div>
+                            <div class="media-actions mt-2">
+                                <a href="{% url 'restore_team' member.pk %}" class="btn-action-edit" style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4);">
+                                    <i class="fa-solid fa-rotate-left"></i> Restore
+                                </a>
+                                <a href="{% url 'delete_team_permanent' member.pk %}" class="btn-action-delete" title="Delete Permanently" onclick="return confirm('Are you sure you want to permanently delete this team member? This cannot be undone.');">
+                                    <i class="fa-solid fa-ban"></i> Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert-glass">
+                        <i class="fa-solid fa-box-open fa-2x mb-3" style="color: rgba(255,255,255,0.2); display:block;"></i>
+                        Recycle bin is empty.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

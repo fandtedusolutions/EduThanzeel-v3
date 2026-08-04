@@ -1,0 +1,75 @@
+{% extends 'admission/partials/base.html' %}
+{% load static %}
+
+{% block title %}Hifz | EduThanzeel{% endblock %}
+
+{% block content %}
+<section class="welcome-three home-welcome-section" style="padding: 70px 0;background-color: #fff9df;border-bottom: none!important;">
+   <div class="container">
+      <div class="row clearfix">
+         <h1 class="headings" data-aos="fade-up" data-aos-delay="100">
+            Course Overview : Hifz and Dawrah
+         </h1>
+         <p class="cd-intro">"Fill your heart with the soothing verses of the Qur'an and enlighten your spirit."</p>
+         <div class="welcome-three_content-column col-lg-7 text-start mt-5" data-aos="fade-up">
+            <div class="welcome-three_content-outer">
+               <p class="cd-desc-text">Hifz makes the Qur'an more alive and indisputable in Qira'ah. The Hifz program is designed in an inclusive manner, assisting learners in memorizing Qur'anic verses while strictly following proper recitation rules. It also includes the Daura system for Huffaz, to refine, strengthen, and enshrine both Qira'ah and Hifz in the heart and mind. Understanding that the pace of memorization varies from person to person, we provide one-to-one training, enabling the trainer to give complete and focused attention to each student. Let our hearts be guided by the Qur'an; let the holy words remain محفوظ even while we sleep. Join now for a better life in the Hereafter.</p>
+            </div>
+         </div>
+
+         <div class="welcome-three_image-column col-lg-5" data-aos="fade-left">
+            <div class="welcome-three_image-outer">
+               <div class="welcome-three_color-box"></div>
+               <div class="welcome-three_image">
+                  <img src="{% static 'admission/images/hifz.png' %}" alt="Hifz">
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <div class="cd-grid">
+            <div class="cd-card">
+               <div class="cd-card-label">
+                  <svg viewBox="0 0 24 24">
+                     <circle cx="12" cy="12" r="10" />
+                     <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  Goal
+               </div>
+               <p>Achieving permanent retention and spiritual discipline.</p>
+            </div>
+            <div class="cd-card">
+               <div class="cd-card-label">
+                  <svg viewBox="0 0 24 24">
+                     <circle cx="12" cy="12" r="3" />
+                     <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                     <path d="M4.93 4.93a10 10 0 0 0 0 14.14" />
+                  </svg>
+                  Focus
+               </div>
+               <p>Structured Hifz patterns and intensive Dawra (revision) sessions.</p>
+            </div>
+            <div class="cd-card full">
+               <div class="cd-card-label">
+                  <svg viewBox="0 0 24 24">
+                     <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  </svg>
+                  The Experience
+               </div>
+               <p>Continuous evaluation and digital tracking to ensure no verse is left behind.</p>
+            </div>
+         </div>
+         <div>
+            <a href="{% url 'register' %}?course=hifz" class="cd-btn">
+               <svg viewBox="0 0 24 24">
+                  <path d="M5 12h14" />
+                  <path d="M12 5l7 7-7 7" />
+               </svg>
+               Apply Now
+            </a>
+         </div>
+      </div>
+   </div>
+</section>
+{% endblock %}

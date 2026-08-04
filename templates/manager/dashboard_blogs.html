@@ -1,0 +1,99 @@
+{% extends 'manager/admin_base.html' %}
+{% load static %}
+
+{% block title %}Blogs{% endblock %}
+{% block page_title %}Blogs{% endblock %}
+{% block page_sub %}Create and manage blog posts{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+
+    <!-- Add Blog Form -->
+    <div class="col-lg-4">
+        <div class="glass-card">
+            <h5><i class="fa-solid fa-pen-nib me-2" style="color: #f9a8d4;"></i>Write New Post</h5>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Blog Title</label>
+                    <input type="text" name="title" class="form-control" placeholder="The Importance of Salah..." required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Paragraph 1</label>
+                    <textarea name="content_p1" class="form-control" rows="4" placeholder="First part of the blog..." required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Quote</label>
+                    <textarea name="quote" class="form-control" rows="2" placeholder="Highlight a key sentence..."></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Paragraph 2</label>
+                    <textarea name="content_p2" class="form-control" rows="4" placeholder="Remaining part of the blog..."></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Blog Image</label>
+                    <div id="imagePreview" class="image-preview-container"></div>
+                    <input type="file" name="image" id="id_image" class="form-control" accept="image/*" required>
+                    <small class="text-white-50" style="font-size: 0.7rem;">This image will be used for both the list view and the detailed page.</small>
+                </div>
+                <button type="submit" class="stat-card-btn w-100">
+                    <i class="fa-solid fa-paper-plane me-2"></i>Publish Post
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Blogs Grid -->
+    <div class="col-lg-8">
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="fa-solid fa-newspaper me-2" style="color: #f9a8d4;"></i>Published Posts</h5>
+                <a href="{% url 'recycle_bin_blogs' %}" class="btn-recycle-bin">
+                    <i class="fa-solid fa-trash-arrow-up me-2"></i>Recycle Bin
+                </a>
+            </div>
+            <div class="row g-3">
+                {% for blog in blogs %}
+                <div class="col-md-6">
+                    <div class="media-card">
+                        {% if blog.thumbnail %}
+                            <img src="{{ blog.thumbnail.url }}" class="media-thumb" alt="{{ blog.title }}">
+                        {% elif blog.image %}
+                            <img src="{{ blog.image.url }}" class="media-thumb" alt="{{ blog.title }}">
+                        {% else %}
+                            <div class="thumb-placeholder"><i class="fa-solid fa-newspaper"></i></div>
+                        {% endif %}
+                        <div class="media-body">
+                            <div class="media-title">{{ blog.title }}</div>
+                            <div class="media-meta">{{ blog.date|date:"F d, Y" }}</div>
+                            <div class="media-meta" style="margin-top: -4px;">{{ blog.content_p1|truncatewords:10 }}</div>
+                            <div class="media-actions">
+                                <a href="{% url 'edit_blog' blog.pk %}" class="btn-action-edit">
+                                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                                </a>
+                                <a href="{% url 'soft_delete_blog' blog.pk %}" class="btn-action-delete" title="Move to Recycle Bin">
+                                    <i class="fa-solid fa-trash-can"></i> Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert-glass">
+                        <i class="fa-solid fa-newspaper fa-2x mb-3" style="color: rgba(255,255,255,0.2); display:block;"></i>
+                        No blog posts yet. Share your first story!
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setupImagePreview('id_image', 'imagePreview');
+    });
+</script>
+{% endblock %}

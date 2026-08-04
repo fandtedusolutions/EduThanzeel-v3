@@ -1,0 +1,51 @@
+{% extends 'manager/admin_base.html' %}
+{% load static %}
+
+{% block title %}Recycle Bin | Blogs{% endblock %}
+{% block page_title %}Recycle Bin (Blogs){% endblock %}
+{% block page_sub %}Previously deleted blog posts{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 style="margin:0;"><i class="fa-solid fa-trash-can me-2 text-danger"></i>Deleted Posts ({{ blogs|length }})</h5>
+        <a href="{% url 'admin_blogs' %}" class="back-btn">
+            <i class="fa-solid fa-arrow-left me-1"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Blog Title</th>
+                    <th>Date</th>
+                    <th>Content Snippet</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for blog in blogs %}
+                <tr>
+                    <td><span style="font-weight: 700; color: #fff;">{{ blog.title }}</span></td>
+                    <td>{{ blog.date|date:"M d, Y" }}</td>
+                    <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ blog.content|truncatewords:10 }}</td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'restore_blog' blog.pk %}" class="btn-action-icon" title="Restore to List" style="padding: 4px 10px; font-size: 0.75rem;">
+                                <i class="fa-solid fa-trash-arrow-up"></i> <span class="ms-1">Restore</span>
+                            </a>
+                            <a href="{% url 'delete_blog_permanent' blog.pk %}" class="btn-action-icon" title="Delete Permanently" onclick="return confirm('Are you sure you want to permanently delete this blog post?')" style="padding: 4px 10px; font-size: 0.75rem;">
+                                <i class="fa-solid fa-xmark"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center py-5" style="color: rgba(255,255,255,0.3);">Recycle bin is empty.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

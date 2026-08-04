@@ -1,0 +1,204 @@
+{% extends 'admission/partials/base.html' %}
+{% load static %}
+
+{% block title %}Courses | EduThanzeel{% endblock %}
+
+{% block content %}
+
+
+
+<section class="welcome-three home-welcome-section" style="padding: 70px 0;background-color: #fff9df;">
+         <div class="container">
+            <div class="row clearfix">
+               <div class="welcome-three_content-column col-lg-6 text-start mt-5" data-aos="fade-up">
+                  <div class="welcome-three_content-outer">
+                     <h1 class="headings" data-aos="fade-up" data-aos-delay="100">
+                     Explore Our Courses<br> That Shape Your Future
+                     </h1>
+                     <p>Explore thoughtfully designed courses that combine authentic Islamic knowledge with modern learning methods, helping students grow in both faith and understanding.</p>
+                  </div>
+               </div>
+               <div class="col-lg-2" data-aos="fade-right">
+                  <img src="{% static 'admission/images/vectorr.png' %}" alt="" class="rotating-img">
+               </div>
+               <div class="welcome-three_image-column col-lg-4 mb-5" data-aos="fade-left">
+                  <div class="welcome-three_image-outer">
+                     <div class="welcome-three_color-box"></div>
+                     <div class="welcome-three_image">
+                        <img src="{% static 'admission/images/janaa.png' %}" alt="">
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+
+<section class="courses-section" style="background-color: #fff9df;padding: 120px 0;">
+   <div class="container">
+      <div class="row justify-content-center">
+         <!-- Course 1: Basics -->
+         <div class="col-lg-4 col-md-6 mb-4 d-flex">
+            <div class="course-card d-flex flex-column h-100">
+               <div style="height: 280px; overflow: hidden; border-radius: 0;">
+                  <img src="{% static 'admission/images/basics.png' %}" alt="Basics" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+               </div>
+               <div class="course-content flex-grow-1 d-flex flex-column justify-content-between">
+                  <h4>Basics</h4>
+                  <p>Master Arabic letters through reading, writing, and Makharij training to build a strong gateway into Quran learning.</p>
+                  <div class="welcome-three_button home-button-group text-center">
+                     <a href="{% url 'alm' %}" class="theme-btn btn-style-one">
+                        <span class="btn-wrap">
+                           <span class="text-one">View Details</span>
+                           <span class="text-two">View Details</span>
+                        </span>
+                     </a>
+                     <a href="{% url 'register' %}?course=alm" class="theme-btn btn-style-one btn-pink">
+                        <span class="btn-wrap">
+                           <span class="text-one">Apply Now</span>
+                           <span class="text-two">Apply Now</span>
+                        </span>
+                     </a>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <!-- Course 2: Bayan -->
+         <div class="col-lg-4 col-md-6 mb-4 d-flex">
+            <div class="course-card d-flex flex-column h-100">
+               <div style="height: 280px; overflow: hidden; border-radius: 0;">
+                  <img src="{% static 'admission/images/course-2.png' %}" alt="Bayan" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+               </div>
+               <div class="course-content flex-grow-1 d-flex flex-column justify-content-between">
+                  <h4>Bayan</h4>
+                  <p>Go beyond recitation and understand the message of the Quran with guided reflection and contextual learning.</p>
+                  <div class="welcome-three_button home-button-group text-center">
+                     <a href="{% url 'bayan' %}" class="theme-btn btn-style-one">
+                        <span class="btn-wrap">
+                           <span class="text-one">View Details</span>
+                           <span class="text-two">View Details</span>
+                        </span>
+                     </a>
+                     <a href="{% url 'register' %}?course=bayan" class="theme-btn btn-style-one btn-pink">
+                        <span class="btn-wrap">
+                           <span class="text-one">Apply Now</span>
+                           <span class="text-two">Apply Now</span>
+                        </span>
+                     </a>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <!-- Course 3: Nuzul -->
+         <div class="col-lg-4 col-md-6 mb-4 d-flex">
+            <div class="course-card d-flex flex-column h-100">
+               <div style="height: 280px; overflow: hidden; border-radius: 0;">
+                  <img src="{% static 'admission/images/course-3.png' %}" alt="Nuzul" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+               </div>
+               <div class="course-content flex-grow-1 d-flex flex-column justify-content-between">
+                  <h4>Nuzul</h4>
+                  <p>Learn the beauty of Tajweed and refine your Quran recitation with structured live guidance.</p>
+                  <div class="welcome-three_button home-button-group text-center">
+                     <a href="{% url 'nuzul' %}" class="theme-btn btn-style-one">
+                        <span class="btn-wrap">
+                           <span class="text-one">View Details</span>
+                           <span class="text-two">View Details</span>
+                        </span>
+                     </a>
+                     <a href="{% url 'register' %}?course=nuzul" class="theme-btn btn-style-one btn-pink">
+                        <span class="btn-wrap">
+                           <span class="text-one">Apply Now</span>
+                           <span class="text-two">Apply Now</span>
+                        </span>
+                     </a>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <!-- Course 4: Hifz -->
+         <div class="col-lg-4 col-md-6 mb-4 d-flex">
+            <div class="course-card d-flex flex-column h-100">
+               <div style="height: 280px; overflow: hidden; border-radius: 0;">
+                  <img src="{% static 'admission/images/hifz.png' %}" alt="Hifz" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+               </div>
+               <div class="course-content flex-grow-1 d-flex flex-column justify-content-between">
+                  <h4>Hifz and Dawrah</h4>
+                  <p>Fill your heart with the verses of the Quran through memorization, revision, and personal guidance.</p>
+                  <div class="welcome-three_button home-button-group text-center">
+                     <a href="{% url 'hifz' %}" class="theme-btn btn-style-one">
+                        <span class="btn-wrap">
+                           <span class="text-one">View Details</span>
+                           <span class="text-two">View Details</span>
+                        </span>
+                     </a>
+                     <a href="{% url 'register' %}?course=hifz" class="theme-btn btn-style-one btn-pink">
+                        <span class="btn-wrap">
+                           <span class="text-one">Apply Now</span>
+                           <span class="text-two">Apply Now</span>
+                        </span>
+                     </a>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <!-- Course 5: Crash Course -->
+         <div class="col-lg-4 col-md-6 mb-4 d-flex">
+            <div class="course-card d-flex flex-column h-100">
+               <div style="height: 280px; overflow: hidden; border-radius: 0;">
+                  <img src="{% static 'admission/images/crash.png' %}" alt="Crash Course" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+               </div>
+               <div class="course-content flex-grow-1 d-flex flex-column justify-content-between">
+                  <h4>Crash Course</h4>
+                  <p>Short, high-impact sessions designed to turn exam pressure into focused, confident performance.</p>
+                  <div class="welcome-three_button home-button-group text-center">
+                     <a href="{% url 'crash' %}" class="theme-btn btn-style-one">
+                        <span class="btn-wrap">
+                           <span class="text-one">View Details</span>
+                           <span class="text-two">View Details</span>
+                        </span>
+                     </a>
+                     <a href="{% url 'register' %}?course=crash" class="theme-btn btn-style-one btn-pink">
+                        <span class="btn-wrap">
+                           <span class="text-one">Apply Now</span>
+                           <span class="text-two">Apply Now</span>
+                        </span>
+                     </a>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+var placementSwiper = new Swiper(".placementsSwiper", {
+    slidesPerView: 3,
+    spaceBetween: 30,
+    loop: true,
+    speed: 5000,
+    autoplay: {
+        delay: 0,
+        disableOnInteraction: false
+    },
+    freeMode: true,
+    freeModeMomentum: false,
+    breakpoints: {
+        0: {
+            slidesPerView: 1
+        },
+        768: {
+            slidesPerView: 2
+        },
+        1024: {
+            slidesPerView: 3
+        }
+    }
+});
+</script>
+{% endblock %}

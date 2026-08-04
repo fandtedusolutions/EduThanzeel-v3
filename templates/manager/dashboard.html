@@ -1,0 +1,337 @@
+{% extends 'manager/admin_base.html' %}
+{% load static %}
+
+{% block title %}Overview{% endblock %}
+{% block page_title %}Dashboard Overview{% endblock %}
+{% block page_sub %}Welcome back, Administrator. Here's what's happening today.{% endblock %}
+
+{% block content %}
+
+
+<!-- ── STAT CARDS ── -->
+<div class="row g-4 mb-5">
+    <div class="col-6 col-lg-3">
+        <div class="prem-stat prem-stat-purple">
+            <div class="stat-icon-wrap"><i class="fa-solid fa-user-graduate"></i></div>
+            <div class="big-num">{{ stats.total_admissions }}</div>
+            <div class="stat-lbl">Applications</div>
+            <div class="stat-deco"><i class="fa-solid fa-user-graduate"></i></div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3 delay-1">
+        <div class="prem-stat prem-stat-pink">
+            <div class="stat-icon-wrap"><i class="fa-solid fa-comment-dots"></i></div>
+            <div class="big-num">{{ stats.total_inquiries }}</div>
+            <div class="stat-lbl">Inquiries</div>
+            <div class="stat-deco"><i class="fa-solid fa-comment-dots"></i></div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3 delay-2">
+        <div class="prem-stat prem-stat-green">
+            <div class="stat-icon-wrap"><i class="fa-solid fa-newspaper"></i></div>
+            <div class="big-num">{{ stats.total_blogs }}</div>
+            <div class="stat-lbl">Blog Posts</div>
+            <div class="stat-deco"><i class="fa-solid fa-newspaper"></i></div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3 delay-3">
+        <div class="prem-stat prem-stat-amber">
+            <div class="stat-icon-wrap"><i class="fa-solid fa-trophy"></i></div>
+            <div class="big-num">{{ stats.total_achievements }}</div>
+            <div class="stat-lbl">Achievements</div>
+            <div class="stat-deco"><i class="fa-solid fa-trophy"></i></div>
+        </div>
+    </div>
+</div>
+
+<!-- ── DAILY ACTIVITY CHART (full width) ── -->
+<div class="chart-panel mb-4">
+    <div class="chart-panel-title">
+        <span
+            style="background:rgba(110,231,183,0.2);color:#6ee7b7;width:34px;height:34px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;"><i
+                class="fa-solid fa-chart-line"></i></span>
+        Daily Activity
+        <span class="chart-panel-badge"
+            style="background:rgba(110,231,183,0.12);color:#6ee7b7;border:1px solid rgba(110,231,183,0.25);">Last 30
+            Days</span>
+    </div>
+    <canvas id="dailyChart" height="80"></canvas>
+</div>
+
+<!-- ── BAR CHARTS ROW ── -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="chart-panel h-100">
+            <div class="chart-panel-title">
+                <span
+                    style="background:rgba(139,92,246,0.2);color:#c4b5fd;width:34px;height:34px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;"><i
+                        class="fa-solid fa-graduation-cap"></i></span>
+                Admissions by Course
+            </div>
+            <canvas id="admCourseChart" height="230"></canvas>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="chart-panel h-100">
+            <div class="chart-panel-title">
+                <span
+                    style="background:rgba(236,72,153,0.2);color:#fbcfe8;width:34px;height:34px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;"><i
+                        class="fa-solid fa-envelope"></i></span>
+                Inquiries by Course
+            </div>
+            <canvas id="inqCourseChart" height="230"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- ── UPCOMING EVENTS + RECENT APPLICATIONS (side by side) ── -->
+<div class="row g-4 mb-2">
+
+    <!-- Upcoming Events -->
+    <div class="col-lg-4">
+        <div class="chart-panel h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="chart-panel-title" style="margin-bottom:0;">
+                    <span
+                        style="background:rgba(110,231,183,0.2);color:#6ee7b7;width:34px;height:34px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;"><i
+                            class="fa-solid fa-calendar-star"></i></span>
+                    Upcoming Events
+                </div>
+                <a href="{% url 'admin_events' %}"
+                    style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.4);text-decoration:none;">View all
+                    →</a>
+            </div>
+
+            {% if upcoming_events %}
+            <div class="d-flex flex-column gap-3">
+                {% for event in upcoming_events %}
+                <div class="event-chip">
+                    {% if event.image %}
+                    <img src="{{ event.image.url }}" class="ev-thumb" alt="{{ event.title }}">
+                    {% else %}
+                    <div class="ev-no-thumb"><i class="fa-solid fa-calendar-star"></i></div>
+                    {% endif %}
+                    <div>
+                        <div class="ev-title">{{ event.title }}</div>
+                        <div class="ev-date"><i class="fa-solid fa-calendar-days me-1"></i>{{ event.date|date:"F d, Y"
+                            }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div
+                style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:160px;color:rgba(255,255,255,0.25);text-align:center;">
+                <i class="fa-solid fa-calendar-xmark fa-2x mb-3" style="color:rgba(110,231,183,0.2);"></i>
+                <p style="font-size:0.85rem;">No upcoming events</p>
+                <a href="{% url 'admin_events' %}"
+                    style="color:#6ee7b7;font-size:0.8rem;font-weight:700;text-decoration:none;margin-top:6px;">+ Add
+                    Event</a>
+            </div>
+            {% endif %}
+
+            <div class="chart-panel mt-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="chart-panel-title" style="margin-bottom:0;">
+                        <span
+                            style="background:rgba(236,72,153,0.2);color:#fbcfe8;width:34px;height:34px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;"><i
+                                class="fa-solid fa-file-pdf"></i></span>
+                        Site Brochure
+                    </div>
+                    <a href="{% url 'admin_brochure' %}"
+                        style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.4);text-decoration:none;">Manage
+                        →</a>
+                </div>
+                {% if site_brochure %}
+                <div class="event-chip mb-0" style="border-color: rgba(236,72,153,0.2);">
+                    <div class="ev-no-thumb" style="background:rgba(236,72,153,0.1);color:rgba(236,72,153,0.5);"><i
+                            class="fa-solid fa-file-pdf"></i></div>
+                    <div style="flex:1;">
+                        <div class="ev-title" style="font-size:0.85rem;">{{ site_brochure.file.name|slice:":30" }}...
+                        </div>
+                        <div class="ev-date" style="color: #fbcfe8;">Last updated {{ site_brochure.updated_at|date:"M d,
+                            Y" }}</div>
+                    </div>
+                    <a href="{{ site_brochure.file.url }}" target="_blank" class="btn btn-sm btn-icon-glass"
+                        style="background: rgba(255,255,255,0.1); color: #fff; border-radius: 8px; padding: 4px 8px;">
+                        <i class="fa-solid fa-download"></i>
+                    </a>
+                </div>
+                {% else %}
+                <div class="event-chip mb-0" style="border-color: rgba(255,255,255,0.1);">
+                    <div class="ev-no-thumb" style="background:rgba(255,255,255,0.05);color:rgba(148,163,184,0.5);"><i
+                            class="fa-solid fa-file-pdf"></i></div>
+                    <div style="flex:1;">
+                        <div class="ev-title" style="font-size:0.85rem;">Default Brochure</div>
+                        <div class="ev-date" style="color: rgba(255,255,255,0.4);">Static File Fallback</div>
+                    </div>
+                    <a href="{% static 'admission/images/bro.pdf' %}" target="_blank" class="btn btn-sm btn-icon-glass"
+                        style="background: rgba(255,255,255,0.1); color: #fff; border-radius: 8px; padding: 4px 8px;">
+                        <i class="fa-solid fa-download"></i>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Applications -->
+    <div class="col-lg-8">
+        <div class="prem-table-wrap h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="chart-panel-title" style="margin-bottom:0;">
+                    <span
+                        style="background:rgba(139,92,246,0.2);color:#c4b5fd;width:34px;height:34px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;"><i
+                            class="fa-solid fa-clock-rotate-left"></i></span>
+                    Recent Applications
+                </div>
+                <a href="{% url 'admin_admissions' %}"
+                    style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.4);text-decoration:none;">View all
+                    →</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table prem-table" style="margin-bottom:0;">
+                    <thead>
+                        <tr>
+                            <th
+                                style="color:rgba(167,139,250,0.8);font-size:0.72rem;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid rgba(167,139,250,0.2);padding-bottom:12px;">
+                                Student</th>
+                            <th
+                                style="color:rgba(167,139,250,0.8);font-size:0.72rem;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid rgba(167,139,250,0.2);padding-bottom:12px;">
+                                Contact</th>
+                            <th
+                                style="color:rgba(167,139,250,0.8);font-size:0.72rem;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid rgba(167,139,250,0.2);padding-bottom:12px;">
+                                Course</th>
+                            <th
+                                style="color:rgba(167,139,250,0.8);font-size:0.72rem;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid rgba(167,139,250,0.2);padding-bottom:12px;">
+                                Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for app in stats.recent_admissions %}
+                        <tr>
+                            <td style="padding:14px 12px 14px 0;">
+                                <div style="font-weight:700;color:#fff;font-size:0.9rem;">{{ app.first_name }} {{
+                                    app.last_name }}</div>
+                                <div style="color:rgba(255,255,255,0.4);font-size:0.78rem;">{{ app.age }} yrs / {{
+                                    app.gender|title }}</div>
+                            </td>
+                            <td style="color:rgba(255,255,255,0.6);font-size:0.85rem;padding:14px 8px;">{{
+                                app.mobile_number }}</td>
+                            <td style="padding:14px 8px;">
+                                {% if app.course %}<span class="course-pill">{{ app.course }}</span>{% else %}<span
+                                    style="color:rgba(255,255,255,0.3);">—</span>{% endif %}
+                            </td>
+                            <td style="color:rgba(255,255,255,0.5);font-size:0.83rem;padding:14px 0 14px 8px;">{{
+                                app.created_at|date:"M d, Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-5" style="color:rgba(255,255,255,0.2);">No
+                                applications yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    Chart.defaults.color = 'rgba(255,255,255,0.55)';
+    const G = { grid: 'rgba(255,255,255,0.055)', tick: 'rgba(255,255,255,0.4)' };
+
+    const barOpts = (color, borderColor) => ({
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                backgroundColor: 'rgba(15,10,30,0.92)',
+                borderColor: borderColor,
+                borderWidth: 1,
+                padding: 12,
+                titleColor: '#fff',
+                bodyColor: 'rgba(255,255,255,0.7)',
+                cornerRadius: 10,
+            }
+        },
+        scales: {
+            x: { ticks: { color: G.tick, font: { size: 11 } }, grid: { color: G.grid }, border: { color: 'transparent' } },
+            y: { ticks: { color: G.tick, stepSize: 1, font: { size: 11 } }, grid: { color: G.grid }, border: { color: 'transparent' }, beginAtZero: true }
+        }
+    });
+
+    // Admissions by Course
+    new Chart(document.getElementById('admCourseChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ adm_course_labels| safe }},
+        datasets: [{ label: 'Admissions', data: {{ adm_course_data| safe }},
+        backgroundColor: 'rgba(139,92,246,0.6)', borderColor: '#8b5cf6',
+        borderWidth: 0, borderRadius: 10, borderSkipped: false }]
+    },
+        options: barOpts('rgba(139,92,246,0.6)', '#8b5cf6')
+});
+
+    // Inquiries by Course
+    new Chart(document.getElementById('inqCourseChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ inq_course_labels| safe }},
+        datasets: [{ label: 'Inquiries', data: {{ inq_course_data| safe }},
+        backgroundColor: 'rgba(236,72,153,0.6)', borderColor: '#ec4899',
+        borderWidth: 0, borderRadius: 10, borderSkipped: false }]
+    },
+        options: barOpts('rgba(236,72,153,0.6)', '#ec4899')
+});
+
+    // Daily Activity
+    new Chart(document.getElementById('dailyChart'), {
+        type: 'line',
+        data: {
+            labels: {{ daily_labels| safe }},
+        datasets: [
+        {
+            label: 'Admissions', data: {{ daily_adm_data| safe }},
+        borderColor: '#8b5cf6', backgroundColor: createGradient('adm', '#8b5cf6'),
+        fill: true, tension: 0.45, pointBackgroundColor: '#8b5cf6',
+        pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5,
+            },
+        {
+            label: 'Inquiries', data: {{ daily_inq_data| safe }},
+        borderColor: '#ec4899', backgroundColor: createGradient('inq', '#ec4899'),
+        fill: true, tension: 0.45, pointBackgroundColor: '#ec4899',
+        pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5,
+            }
+    ]
+    },
+        options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+            legend: { labels: { color: 'rgba(255,255,255,0.6)', usePointStyle: true, pointStyleWidth: 8 } },
+            tooltip: {
+                backgroundColor: 'rgba(15,10,30,0.92)', borderColor: 'rgba(255,255,255,0.1)',
+                borderWidth: 1, padding: 14, cornerRadius: 12,
+                titleColor: '#fff', bodyColor: 'rgba(255,255,255,0.7)',
+            }
+        },
+        scales: {
+            x: { ticks: { color: G.tick, font: { size: 11 } }, grid: { color: G.grid }, border: { color: 'transparent' } },
+            y: { ticks: { color: G.tick, stepSize: 1, font: { size: 11 } }, grid: { color: G.grid }, border: { color: 'transparent' }, beginAtZero: true }
+        }
+    }
+});
+
+    function createGradient(id, hex) {
+        // gradients are created after chart init via plugin — return static rgba here
+        return hex === '#8b5cf6'
+            ? 'rgba(139,92,246,0.12)'
+            : 'rgba(236,72,153,0.08)';
+    }
+</script>
+{% endblock %}

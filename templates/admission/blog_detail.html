@@ -1,0 +1,61 @@
+{% extends 'admission/partials/base.html' %}
+{% load static %}
+
+{% block title %}{{ blog.title }} | EduThanzeel{% endblock %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+{% block content %}
+<section class="welcome-three home-welcome-section"
+   style="padding: 70px 0;background-color: #fff9df;border-bottom: none!important;">
+   <div class="container">
+      <div class="row clearfix">
+         <h1 class="headings mb-5" data-aos="fade-up" data-aos-delay="100">{{ blog.title }}</h1>
+
+         <div class="welcome-three_image-column col-lg-5" data-aos="fade-left">
+            <div class="welcome-three_image-outer">
+               <div class="welcome-three_color-box"></div>
+               <div class="welcome-three_image">
+                  {% if blog.image %}
+                  <img src="{{ blog.image.url }}" alt="{{ blog.title }}">
+                  {% else %}
+                  <img src="{% static 'admission/images/blog-1.webp' %}" alt="{{ blog.title }}">
+                  {% endif %}
+               </div>
+            </div>
+         </div>
+
+         <div class="welcome-three_content-column col-lg-7 text-start mt-5" data-aos="fade-up">
+            <div class="welcome-three_content-outer">
+               {% if blog.quote %}
+               <p class="cd-intro">"{{ blog.quote }}"</p>
+               {% endif %}
+
+               <div class="cd-desc-text">
+                  {{ blog.content_p1|linebreaksbr }}
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <div class="row">
+         <div class="col-12">
+            <div class="cd-desc-text" style="margin-top: 24px;">
+               {{ blog.content_p2|linebreaksbr }}
+            </div>
+         </div>
+      </div>
+
+      <div class="mt-5">
+         <a href="{% url 'blog' %}" class="theme-btn btn-style-one btn-pink">
+            <span class="btn-wrap">
+               <span class="text-one">Back To Blogs</span>
+               <span class="text-two">Back To Blogs</span>
+            </span>
+         </a>
+      </div>
+   </div>
+</section>
+{% endblock %}

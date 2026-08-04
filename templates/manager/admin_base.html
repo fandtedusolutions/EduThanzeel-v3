@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Dashboard{% endblock %} | EduThanzeel</title>
+    <link rel="icon" type="image/webp" href="{% static 'admission/images/favicon.webp' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="{% static 'admission/css/manager.css' %}" rel="stylesheet">
+
+
+    <script>
+        function setupImagePreview(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+
+            if (!input || !preview) return;
+
+            input.addEventListener('change', function () {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        preview.style.display = 'flex';
+                        preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                } else {
+                    preview.style.display = 'none';
+                    preview.innerHTML = '';
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="logo-box">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'admission/images/eduuucolor.png' %}" alt="EduThanzeel">
+                </a>
+            </div>
+
+            <nav>
+                <div class="sidebar-label">Main</div>
+                <a href="{% url 'admin_dashboard' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+                    <i class="fa-solid fa-gauge-high"></i> Overview
+                </a>
+                <a href="{% url 'admin_admissions' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'admin_admissions' %}active{% endif %}">
+                    <i class="fa-solid fa-graduation-cap"></i> Admissions
+                </a>
+                <a href="{% url 'admin_inquiries' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'admin_inquiries' %}active{% endif %}">
+                    <i class="fa-solid fa-envelope"></i> Inquiries
+                </a>
+
+                <div class="sidebar-label">Content</div>
+                <a href="{% url 'admin_blogs' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'admin_blogs' %}active{% endif %}">
+                    <i class="fa-solid fa-newspaper"></i> Blogs
+                </a>
+                <a href="{% url 'admin_achievements' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'admin_achievements' %}active{% endif %}">
+                    <i class="fa-solid fa-trophy"></i> Achievements
+                </a>
+                <a href="{% url 'admin_events' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'admin_events' %}active{% endif %}">
+                    <i class="fa-solid fa-calendar-days"></i> Events
+                </a>
+                <a href="{% url 'admin_testimonials' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'admin_testimonials' %}active{% endif %}">
+                    <i class="fa-solid fa-comments"></i> Testimonials
+                </a>
+                <a href="{% url 'admin_video' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'admin_video' %}active{% endif %}">
+                    <i class="fa-brands fa-youtube"></i> Frontpage Video
+                </a>
+                <a href="{% url 'admin_brochure' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'admin_brochure' %}active{% endif %}">
+                    <i class="fa-solid fa-file-pdf"></i> Brochure
+                </a>
+                <a href="{% url 'admin_team' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'admin_team' %}active{% endif %}">
+                    <i class="fa-solid fa-users"></i> Team Members
+                </a>
+                <a href="{% url 'admin_notifications' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'admin_notifications' %}active{% endif %}">
+                    <i class="fa-solid fa-bell"></i> Notifications
+                </a>
+            </nav>
+
+            <div class="sidebar-sign-out">
+                <form action="/admin/logout/" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="sign-out-btn">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <div>
+                    <h1 class="page-heading">{% block page_title %}Dashboard{% endblock %}</h1>
+                    <p class="page-sub">{% block page_sub %}EduThanzeel Admin Panel{% endblock %}</p>
+                </div>
+                <div class="admin-badge">
+                    <div class="info">
+                        <div class="name">Administrator</div>
+                        <div class="role">EduThanzeel Manager</div>
+                    </div>
+                    <div class="admin-avatar">AD</div>
+                </div>
+            </header>
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+</body>
+
+</html>

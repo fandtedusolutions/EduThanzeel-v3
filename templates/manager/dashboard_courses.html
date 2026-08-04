@@ -1,0 +1,98 @@
+{% extends 'manager/admin_base.html' %}
+{% load static %}
+
+{% block title %}Courses{% endblock %}
+{% block page_title %}Courses{% endblock %}
+{% block page_sub %}Manage your published courses{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+
+    <!-- Add Course Form -->
+    <div class="col-lg-4">
+        <div class="glass-card h-100">
+            <h5><i class="fa-solid fa-plus-circle me-2" style="color: #a78bfa;"></i>Add New Course</h5>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Course Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="e.g. Arabic Grammar Basics" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Short Description</label>
+                    <textarea name="description" class="form-control" rows="4" placeholder="Describe this course briefly..." required></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Thumbnail (Optional)</label>
+                    <div id="coursePreview" class="image-preview-container"></div>
+                    <input type="file" name="image" id="id_course_image" class="form-control" accept="image/*">
+                    <small style="color: rgba(255,255,255,0.35); font-size: 0.75rem; margin-top: 6px; display: block;">Leave blank to use the default course image</small>
+                </div>
+                <button type="submit" class="stat-card-btn w-100">
+                    <i class="fa-solid fa-rocket me-2"></i>Publish Course
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Courses Grid -->
+    <div class="col-lg-8">
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="fa-solid fa-book-open me-2" style="color: #a78bfa;"></i>Published Courses</h5>
+                <a href="{% url 'recycle_bin_courses' %}" class="btn-recycle-bin">
+                    <i class="fa-solid fa-trash-arrow-up me-2"></i>Recycle Bin
+                </a>
+            </div>
+            <div class="row g-3">
+                {% for course in courses %}
+                <div class="col-md-6">
+                    <div class="media-card">
+                        {% if course.image %}
+                            <img src="{{ course.image.url }}" class="media-thumb" alt="{{ course.name }}">
+                        {% elif course.slug == 'basics' %}
+                            <img src="{% static 'admission/images/basics.png' %}" class="media-thumb" alt="{{ course.name }}">
+                        {% elif course.slug == 'bayan' %}
+                            <img src="{% static 'admission/images/bay.png' %}" class="media-thumb" alt="{{ course.name }}">
+                        {% elif course.slug == 'nuzul' %}
+                            <img src="{% static 'admission/images/nuzu.png' %}" class="media-thumb" alt="{{ course.name }}">
+                        {% elif course.slug == 'hifz' %}
+                            <img src="{% static 'admission/images/hifz.png' %}" class="media-thumb" alt="{{ course.name }}">
+                        {% elif course.slug == 'crash' %}
+                            <img src="{% static 'admission/images/crash.png' %}" class="media-thumb" alt="{{ course.name }}">
+                        {% else %}
+                            <div class="thumb-placeholder"><i class="fa-solid fa-book-open"></i></div>
+                        {% endif %}
+                        <div class="media-body">
+                            <div class="media-title">{{ course.name }}</div>
+                            <div class="media-meta">{{ course.description|truncatewords:12 }}</div>
+                            <div class="media-actions">
+                                <a href="{% url 'edit_course' course.pk %}" class="btn-action-edit">
+                                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                                </a>
+                                <a href="{% url 'soft_delete_course' course.pk %}" class="btn-action-delete" title="Move to Recycle Bin">
+                                    <i class="fa-solid fa-trash-can"></i> Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert-glass">
+                        <i class="fa-solid fa-book-open fa-2x mb-3" style="color: rgba(255,255,255,0.2);"></i>
+                        <p>No courses yet. Add your first course using the form.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setupImagePreview('id_course_image', 'coursePreview');
+    });
+</script>
+{% endblock %}

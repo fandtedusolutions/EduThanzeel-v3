@@ -1,0 +1,66 @@
+{% extends 'manager/admin_base.html' %}
+{% load static %}
+
+{% block title %}Brochure Setup{% endblock %}
+{% block page_title %}Brochure Config{% endblock %}
+{% block page_sub %}Manage the brochure PDF displayed on your website{% endblock %}
+
+{% block content %}
+<div class="row g-4 justify-content-center">
+    <!-- Add/Update Brochure Form -->
+    <div class="col-lg-6">
+        <div class="glass-card">
+            <h5><i class="fa-solid fa-file-pdf me-2" style="color: #ef4444;"></i>Update Brochure PDF</h5>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Upload New PDF</label>
+                    <input type="file" name="brochure_file" class="form-control" accept="application/pdf" required>
+                    <small style="color: rgba(255,255,255,0.6); margin-top: 10px; display: block;">Select a PDF file to replace the current brochure.</small>
+                </div>
+                
+                <button type="submit" class="stat-card-btn w-100 mt-2">
+                    <i class="fa-solid fa-floppy-disk me-2"></i>Save Brochure
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Current Brochure Preview -->
+    <div class="col-lg-6">
+        <div class="glass-card">
+            <h5><i class="fa-solid fa-display me-2 text-primary"></i>Current Brochure</h5>
+            {% if site_brochure %}
+            <div class="mt-3">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">
+                        <i class="fa-solid fa-file-pdf me-1" style="color: #ef4444;"></i>
+                        <span style="color: #fff; font-weight: 600;">{{ site_brochure.file.name|slice:":50" }}...</span>
+                        <br>
+                        Updated: {{ site_brochure.updated_at|date:"M d, Y H:i" }}
+                    </div>
+                    <a href="{{ site_brochure.file.url }}" target="_blank" class="btn btn-sm btn-outline-light" style="border-radius: 8px; border-color: rgba(255,255,255,0.2); font-size: 0.75rem;">
+                        <i class="fa-solid fa-external-link me-1"></i>Open Full
+                    </a>
+                </div>
+                <div style="border-radius: 15px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); height: 450px;">
+                    <iframe src="{{ site_brochure.file.url }}" width="100%" height="100%" style="border: none;"></iframe>
+                </div>
+            </div>
+            {% else %}
+            <div class="mt-3">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">
+                        <i class="fa-solid fa-file-pdf me-1" style="color: #94a3b8;"></i>
+                        <span style="color: #fff; font-weight: 600;">Default Brochure (Static)</span>
+                    </div>
+                </div>
+                <div style="border-radius: 15px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); height: 450px;">
+                    <iframe src="{% static 'admission/images/bro.pdf' %}" width="100%" height="100%" style="border: none;"></iframe>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

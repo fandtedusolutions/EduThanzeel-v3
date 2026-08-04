@@ -1,0 +1,86 @@
+{% extends 'admission/partials/base.html' %}
+{% load static %}
+
+{% block title %}Basics | EduThanzeel{% endblock %}
+
+{% block content %}
+<section class="welcome-three home-welcome-section"
+   style="padding: 70px 0;background-color: #fff9df;border-bottom: none!important;">
+   <div class="container">
+      <div class="row clearfix">
+         <h1 class="headings" data-aos="fade-up" data-aos-delay="100">
+            Course Overview : Basics
+         </h1>
+         <p class="cd-intro">"For a Muslim, the Arabic language isn't just a skill it is the very breath of our faith."</p>
+         <div class="welcome-three_content-column col-lg-7 text-start mt-5" data-aos="fade-up">
+            <div class="welcome-three_content-outer">
+               <p class="cd-desc-text">To truly hold the Qur'an in your heart, you must first be able to read and
+                  write its sacred letters with clarity and soul. Our Arabic Alphabet Course is designed to build
+                  that unbreakable foundation, blending the beauty of Khat Naskh calligraphy with precise Makharij
+                  training to ensure every letter is articulated from its rightful place. We guide you through a
+                  transformative journey, teaching you to read letter by letter, then word by word, until full
+                  sentences flow with ease. As the essential Gateway to the Nuzul Program, this course recognizes
+                  that a strong base in reading and writing is everything. Don't just look at the verses learn
+                  to write them, speak them, and live them. Welcome to the Gateway of the Nuzul Program. Take your
+                  first step and build your base today.</p>
+            </div>
+         </div>
+
+         <div class="welcome-three_image-column col-lg-5" data-aos="fade-left">
+            <div class="welcome-three_image-outer">
+               <div class="welcome-three_color-box"></div>
+               <div class="welcome-three_image">
+                  <img src="{% static 'admission/images/basics (1).png' %}" alt="Basics">
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <div class="cd-grid">
+            <div class="cd-card">
+               <div class="cd-card-label">
+                  <svg viewBox="0 0 24 24">
+                     <circle cx="12" cy="12" r="10" />
+                     <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  Goal
+               </div>
+               <p>To build a strong, confident foundation that prepares students to enter the Nuzul Program with
+                  clarity and readiness.</p>
+            </div>
+            <div class="cd-card">
+               <div class="cd-card-label">
+                  <svg viewBox="0 0 24 24">
+                     <circle cx="12" cy="12" r="3" />
+                     <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                     <path d="M4.93 4.93a10 10 0 0 0 0 14.14" />
+                  </svg>
+                  Focus
+               </div>
+               <p>Mastering Arabic letters through structured reading, writing, and Makharij training.</p>
+            </div>
+            <div class="cd-card full">
+               <div class="cd-card-label">
+                  <svg viewBox="0 0 24 24">
+                     <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  </svg>
+                  The Experience
+               </div>
+               <p>Step-by-step interactive live sessions where students move from letters to flowing
+                  sentences combining calligraphy practice with precise pronunciation and personal guidance</p>
+            </div>
+         </div>
+         <div>
+            <a href="{% url 'register' %}?course=alm" class="cd-btn">
+               <svg viewBox="0 0 24 24">
+                  <path d="M5 12h14" />
+                  <path d="M12 5l7 7-7 7" />
+               </svg>
+               Apply Now
+            </a>
+         </div>
+      </div>
+   </div>
+</section>
+{% endblock %}

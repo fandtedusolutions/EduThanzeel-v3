@@ -1,0 +1,169 @@
+{% extends 'manager/admin_base.html' %}
+{% load static %}
+
+{% block title %}Admissions{% endblock %}
+{% block page_title %}Student Admissions{% endblock %}
+{% block page_sub %}Review and manage all student enrollment applications{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <h5 style="margin:0;"><i class="fa-solid fa-graduation-cap me-2" style="color: var(--accent);"></i>Applications ({{ admissions.paginator.count }})</h5>
+        <div class="d-flex gap-2 align-items-center">
+            <a href="{% url 'export_admissions_excel' %}?course={{ selected_course }}&status={{ selected_status }}&date_from={{ date_from }}&date_to={{ date_to }}" class="btn-action-icon gap-2" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#10b981 !important;">
+                <i class="fa-solid fa-file-excel"></i> <span style="font-size: 0.8rem; font-weight: 600;">Export Excel</span>
+            </a>
+            <a href="{% url 'recycle_bin_admissions' %}" class="btn-action-icon gap-2">
+                <i class="fa-solid fa-trash-can"></i> <span style="font-size: 0.8rem; font-weight: 600;">Recycle Bin</span>
+            </a>
+        </div>
+        
+        <div class="w-100">
+            <form id="filterForm" method="GET" class="d-flex align-items-center gap-3 flex-nowrap overflow-auto pb-1" style="scrollbar-width: none;">
+                <!-- Course Filter -->
+                <div class="flex-shrink-0">
+                    <select name="course" class="form-select form-select-sm" style="min-width: 130px;" onchange="this.form.submit()">
+                        <option value="">All Courses</option>
+                        <option value="alm" {% if selected_course == 'alm' %}selected{% endif %}>Basics</option>
+                        <option value="bayan" {% if selected_course == 'bayan' %}selected{% endif %}>Bayan</option>
+                        <option value="nuzul" {% if selected_course == 'nuzul' %}selected{% endif %}>Nuzul</option>
+                        <option value="hifz" {% if selected_course == 'hifz' %}selected{% endif %}>Hifz</option>
+                        <option value="crash" {% if selected_course == 'crash' %}selected{% endif %}>Crash Course</option>
+                    </select>
+                </div>
+
+                <!-- Status Filter -->
+                <div class="flex-shrink-0">
+                    <select name="status" class="form-select form-select-sm" style="min-width: 110px;" onchange="this.form.submit()">
+                        <option value="">All Status</option>
+                        <option value="pending" {% if selected_status == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="viewed" {% if selected_status == 'viewed' %}selected{% endif %}>Viewed</option>
+                    </select>
+                </div>
+
+                <!-- Date Filters -->
+                <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                    <input type="date" name="date_from" class="form-control form-control-sm" value="{{ date_from }}" onchange="this.form.submit()" style="width: 140px;">
+                    <span class="text-white-50 small">to</span>
+                    <input type="date" name="date_to" class="form-control form-control-sm" value="{{ date_to }}" onchange="this.form.submit()" style="width: 140px;">
+                </div>
+
+                <!-- Search -->
+                <div class="flex-grow-1" style="min-width: 150px;">
+                    <input type="text" id="searchInput" class="form-control form-control-sm w-100" placeholder="Search..." oninput="filterTable()">
+                </div>
+
+                <!-- Action Btns -->
+                <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                    <button type="button" id="clearAllBtn" class="btn btn-outline-light btn-sm d-flex align-items-center gap-2 px-3 {% if not selected_course and not selected_status and not date_from and not date_to %}d-none{% endif %}" onclick="clearFilters()">
+                        <i class="fa-solid fa-rotate-left"></i> <span>Clear</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table" id="admissionsTable">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Email</th>
+                    <th>Age & Gender</th>
+                    <th>Contact</th>
+                    <th>Course</th>
+                    <th>Applied</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in admissions %}
+                <tr>
+                    <td><span style="font-weight: 700; color: #fff;">{{ app.first_name }} {{ app.last_name }}</span></td>
+                    <td>{{ app.email|default:"—" }}</td>
+                    <td>{{ app.age }} yrs / {{ app.gender|title }}</td>
+                    <td>{{ app.mobile_number }}</td>
+                    <td>{{ app.course|default:"—" }}</td>
+                    <td>{{ app.created_at|date:"M d, Y" }}</td>
+                    <td>
+                        {% if app.status == 'viewed' %}
+                            <span class="badge-received" style="background: rgba(16, 185, 129, 0.2); border-color: #10b981; color: #10b981;">Viewed</span>
+                        {% else %}
+                            <span class="badge-pending">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            {% if app.status != 'viewed' %}
+                                <a href="{% url 'mark_admission_viewed' app.pk %}" class="btn btn-sm btn-glass-primary" style="padding: 4px 10px; font-size: 0.75rem;">
+                                    Mark Viewed
+                                </a>
+                            {% else %}
+                                <span class="text-white-50" style="font-size: 0.75rem;"><i class="fa-solid fa-check"></i> Processed</span>
+                                <a href="{% url 'unmark_admission_pending' app.pk %}" class="btn-action-icon" title="Unmark / Pending" style="padding: 4px 8px; font-size: 0.75rem;">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                </a>
+                            {% endif %}
+                            
+                            <a href="{% url 'soft_delete_admission' app.pk %}" class="btn-action-icon" title="Delete Application" style="padding: 4px 8px; font-size: 0.75rem;">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="8" class="text-center py-5" style="color: rgba(255,255,255,0.3);">No student applications found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if admissions.has_other_pages %}
+    <nav class="pagination">
+        {% if admissions.has_previous %}
+            <a href="?page={{ admissions.previous_page_number }}{% if selected_course %}&course={{ selected_course }}{% endif %}" class="page-link"><i class="fa-solid fa-chevron-left"></i> Previous</a>
+        {% else %}
+            <span class="page-link opacity-50"><i class="fa-solid fa-chevron-left"></i> Previous</span>
+        {% endif %}
+
+        {% for i in admissions.paginator.page_range %}
+            {% if admissions.number == i %}
+                <span class="page-item active"><span class="page-link">{{ i }}</span></span>
+            {% else %}
+                <a href="?page={{ i }}{% if selected_course %}&course={{ selected_course }}{% endif %}" class="page-link">{{ i }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if admissions.has_next %}
+            <a href="?page={{ admissions.next_page_number }}{% if selected_course %}&course={{ selected_course }}{% endif %}" class="page-link">Next <i class="fa-solid fa-chevron-right"></i></a>
+        {% else %}
+            <span class="page-link opacity-50">Next <i class="fa-solid fa-chevron-right"></i></span>
+        {% endif %}
+    </nav>
+    {% endif %}
+</div>
+
+<script>
+function filterTable() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const clearBtn = document.getElementById('clearAllBtn');
+    const hasActiveFilters = "{{ selected_course }}" || "{{ selected_status }}" || "{{ date_from }}" || "{{ date_to }}";
+
+    if (q.length > 0 || hasActiveFilters) {
+        clearBtn.classList.remove('d-none');
+    } else {
+        clearBtn.classList.add('d-none');
+    }
+
+    document.querySelectorAll('#admissionsTable tbody tr').forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(q) ? '' : 'none';
+    });
+}
+
+function clearFilters() {
+    window.location.href = "{% url 'admin_admissions' %}";
+}
+</script>
+{% endblock %}

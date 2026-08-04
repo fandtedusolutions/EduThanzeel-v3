@@ -1,0 +1,106 @@
+{% load static %}
+<header class="main-header header-style-three">
+   <div class="header-top">
+      <div class="container">
+         <div class="inner-container">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+               <div class="left-box d-flex align-items-center flex-wrap">
+                  <!-- Info List -->
+                  <ul class="header-top_list">
+                     <li><span class="icon fa-solid fa-envelope fa-fw"></span><a
+                           href="mailto:Support24@gmail.com">Support24@gmail.com</a></li>
+                     <li><span class="icon fa-solid fa-location-dot fa-fw"></span>Suite 80 Golden Street
+                        Germeney</li>
+                  </ul>
+                  <div class="bismillah"><img src="{% static 'admission/images/icons/bismillah-2.png' %}" alt=""> </div>
+               </div>
+               <ul class="header-top_list-two">
+
+                  <li><span class="icon fa-solid fa-phone fa-fw"></span>Let Talk <a href="tel:+88012714101">+88 01
+                        27 14 101</a></li>
+               </ul>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="header-upper">
+      <div class="container">
+         <div class="inner-container">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+               <div class="logo-box">
+                  <div class="logo"><a href="{% url 'home' %}"><img src="{% static 'admission/images/eduuucolor.png' %}"
+                           alt="" title="" class="site-logo-img"></a></div>
+               </div>
+
+               <div class="nav-outer">
+                  <nav class="main-menu navbar-expand-md">
+                     <div class="navbar-header">
+                        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                           data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                           aria-expanded="false" aria-label="Toggle navigation">
+                           <span class="icon-bar"></span>
+                           <span class="icon-bar"></span>
+                           <span class="icon-bar"></span>
+                        </button>
+                     </div>
+
+                     <div class="navbar-collapse collapse clearfix" id="navbarSupportedContent">
+                        <ul class="navigation clearfix">
+                           <li><a href="{% url 'home' %}">Home</a></li>
+                           <li><a href="{% url 'about' %}">About</a></li>
+                           <li><a href="{% url 'courses' %}">Courses</a></li>
+                           <li><a href="{% url 'gallery' %}">Gallery</a></li>
+                           <li><a href="{% url 'blog' %}">Blog</a></li>
+                           <li><a href="{% url 'contact' %}">Contact</a></li>
+                        </ul>
+                     </div>
+                  </nav>
+               </div>
+
+               <div class="outer-box d-flex align-items-center flex-wrap">
+
+                  <div class="header_button-box">
+                     <a href="{% url 'register' %}" class="theme-btn btn-style-four">
+                        <span class="btn-wrap">
+                           <span class="text-one">Apply Now</span>
+                           <span class="text-two">Apply Now</span>
+                        </span>
+                     </a>
+                  </div>
+
+                  <div class="mobile-nav-toggler"><span class="icon flaticon-menu"></span></div>
+               </div>
+
+            </div>
+         </div>
+      </div>
+   </div>
+   <!--End Header Upper-->
+
+   <!-- Mobile Menu  -->
+   <div class="mobile-menu">
+      <div class="menu-backdrop"></div>
+      <div class="close-btn"><span class="icon flaticon-close-1"></span></div>
+
+      <nav class="menu-box">
+         <div class="nav-logo"><a href="{% url 'home' %}"><img src="{% static 'admission/images/eduuucolor.png' %}"
+                  alt="" title=""></a>
+         </div>
+         <div class="menu-outer">
+            <!--Here Menu Will Come Automatically Via Javascript / Same Menu as in Header-->
+         </div>
+         <div class="mobile-menu-btn" style="padding: 20px; text-align: center;">
+            <a href="{% url 'register' %}" class="theme-btn btn-style-four flex-grow-1"
+               style="width: 100%; border-radius: 8px;">
+               <span class="btn-wrap">
+                  <span class="text-one">Apply Now</span>
+                  <span class="text-two">Apply Now</span>
+               </span>
+            </a>
+         </div>
+      </nav>
+   </div>
+   <!-- End Mobile Menu -->
+
+</header>

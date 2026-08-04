@@ -1,0 +1,53 @@
+{% extends 'admission/partials/base.html' %}
+{% load static %}
+
+{% block title %}Blog | EduThanzeel{% endblock %}
+
+{% block content %}
+<section class="courses-one" style="padding-bottom: 0!important;">
+   <div class="container">
+      <div class="sec-title centered">
+         <h1 class="headings text-center" data-aos="fade-up" data-aos-delay="100">
+            Explore Our News <br>and Blogs
+         </h1>
+      </div>
+
+      <div class="row clearfix">
+         {% for blog in blogs %}
+         <div class="course-block_one col-xl-4 col-lg-4 col-md-6 col-sm-12">
+            <div class="course-block_one-inner">
+               <div class="course-block_one-image">
+                  <a href="{% url 'blog_detail' blog.slug %}">
+                     {% if blog.image %}
+                     <img src="{{ blog.image.url }}" alt="{{ blog.title }}">
+                     {% else %}
+                     <img src="{% static 'admission/images/post4.jpeg' %}" alt="{{ blog.title }}">
+                     {% endif %}
+                  </a>
+               </div>
+               <div class="course-block_one-content">
+                  <div class="course-block_one-icon">
+                     <img src="{% static 'admission/images/favicon.webp' %}" alt="EduThanzeel">
+                  </div>
+                  <h4 class="course-block_one-heading">
+                     <a href="{% url 'blog_detail' blog.slug %}">{{ blog.title }}</a>
+                  </h4>
+                  <div class="course-block_one-text">
+                     {{ blog.content_p1|truncatewords:20 }}
+                  </div>
+                  <div class="course-block_one-buttons d-flex justify-content-between flex-wrap">
+                     <a class="theme-btn course-block_one-study" href="{% url 'blog_detail' blog.slug %}">Read Blog</a>
+                     <div class="course-block_one-price">{{ blog.date|date:"d/m/Y" }}</div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         {% empty %}
+         <div class="col-12 text-center py-5">
+            <p class="text-muted">No blog posts found. Check back soon for new updates!</p>
+         </div>
+         {% endfor %}
+      </div>
+   </div>
+</section>
+{% endblock %}

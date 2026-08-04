@@ -1,0 +1,83 @@
+{% extends 'manager/admin_base.html' %}
+{% load static %}
+
+{% block title %}Achievements{% endblock %}
+{% block page_title %}Achievements{% endblock %}
+{% block page_sub %}Showcase student and institutional achievements{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+
+    <!-- Add Achievement Form -->
+    <div class="col-lg-4">
+        <div class="glass-card">
+            <h5><i class="fa-solid fa-trophy me-2" style="color: #fcd34d;"></i>Add Achievement</h5>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Achievement Title</label>
+                    <input type="text" name="title" class="form-control" placeholder="Distinction in Samastha Exam" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Achievement Poster</label>
+                    <div id="imagePreview" class="image-preview-container"></div>
+                    <input type="file" name="image" id="id_image" class="form-control" accept="image/*" required>
+                </div>
+                <button type="submit" class="stat-card-btn w-100">
+                    <i class="fa-solid fa-upload me-2"></i>Upload Achievement
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Achievements Grid -->
+    <div class="col-lg-8">
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="fa-solid fa-trophy me-2" style="color: #fcd34d;"></i>All Achievements</h5>
+                <a href="{% url 'recycle_bin_achievements' %}" class="btn-recycle-bin">
+                    <i class="fa-solid fa-trash-arrow-up me-2"></i>Recycle Bin
+                </a>
+            </div>
+            <div class="row g-3">
+                {% for achievement in achievements %}
+                <div class="col-md-6 col-xl-4">
+                    <div class="media-card">
+                        {% if achievement.image %}
+                            <img src="{{ achievement.image.url }}" class="media-thumb" alt="{{ achievement.title }}">
+                        {% else %}
+                            <div class="thumb-placeholder"><i class="fa-solid fa-trophy"></i></div>
+                        {% endif %}
+                        <div class="media-body">
+                            <div class="media-title">{{ achievement.title }}</div>
+                            <div class="media-meta">Added {{ achievement.created_at|date:"M d, Y" }}</div>
+                            <div class="media-actions">
+                                <a href="{% url 'edit_achievement' achievement.pk %}" class="btn-action-edit">
+                                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                                </a>
+                                <a href="{% url 'soft_delete_achievement' achievement.pk %}" class="btn-action-delete" title="Move to Recycle Bin">
+                                    <i class="fa-solid fa-trash-can"></i> Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert-glass">
+                        <i class="fa-solid fa-trophy fa-2x mb-3" style="color: rgba(255,255,255,0.2); display:block;"></i>
+                        No achievements yet. Upload your first one!
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setupImagePreview('id_image', 'imagePreview');
+    });
+</script>
+{% endblock %}
