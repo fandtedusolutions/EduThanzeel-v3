@@ -1,0 +1,517 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Kuja RSVPs | EduThanzeel</title>
+    <link rel="icon" href="{% static 'admission/images/favicon.ico' %}" sizes="any">
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1b0512;
+            --maroon: #5c0135;
+            --gold: #c9a227;
+            --gold-soft: #e8cd7a;
+            --cream: #faf5ea;
+            --paper: #fffdf8;
+            --line: #eadcc4;
+            --text: #2a1620;
+            --muted: #7a5d68;
+            --sidebar: 250px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Jost', sans-serif;
+            background:
+                radial-gradient(ellipse 80% 40% at 100% 0%, rgba(201, 162, 39, .12), transparent 55%),
+                var(--cream);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .layout { display: flex; min-height: 100vh; }
+
+        .sidebar {
+            width: var(--sidebar);
+            background: linear-gradient(180deg, #1b0512, #33001d);
+            color: var(--cream);
+            padding: 28px 20px;
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            border-right: 3px solid var(--gold);
+        }
+
+        .brand img { height: 34px; width: auto; display: block; }
+
+        .nav-label {
+            margin: 34px 0 10px;
+            font-size: 11px;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--gold-soft);
+        }
+
+        .nav-link {
+            display: block;
+            color: rgba(250, 245, 234, .78);
+            text-decoration: none;
+            padding: 11px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .nav-link:hover { background: rgba(255,255,255,.06); color: var(--cream); }
+        .nav-link.active {
+            background: rgba(201, 162, 39, .16);
+            color: var(--gold-soft);
+            box-shadow: inset 3px 0 0 var(--gold);
+        }
+
+        .sign-out { margin-top: auto; }
+        .sign-out button {
+            width: 100%;
+            background: transparent;
+            border: 1px solid rgba(232, 205, 122, .4);
+            color: var(--gold-soft);
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+        }
+        .sign-out button:hover { background: rgba(201, 162, 39, .12); }
+
+        .main { flex: 1; padding: 28px 36px 40px; min-width: 0; }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .eyebrow {
+            color: var(--gold);
+            font-size: 11px;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .topbar h1 {
+            font-family: 'Marcellus', serif;
+            font-size: 1.85rem;
+            font-weight: 400;
+        }
+
+        .topbar p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+        .user-chip {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 7px 14px 7px 7px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--ink);
+            color: var(--gold-soft);
+            display: grid;
+            place-items: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .user-chip .name { font-size: 13px; font-weight: 600; }
+        .user-chip .role { font-size: 11px; color: var(--muted); }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-top: 3px solid var(--gold);
+            border-radius: 12px;
+            padding: 16px 18px;
+        }
+
+        .stat .label {
+            font-size: 11px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .stat .value {
+            font-family: 'Marcellus', serif;
+            font-size: 2rem;
+            margin-top: 6px;
+            color: var(--ink);
+        }
+
+        .panel {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .panel-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 18px 20px 0;
+        }
+
+        .panel-head h2 {
+            font-family: 'Marcellus', serif;
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            border: 0;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 8px;
+            padding: 9px 14px;
+        }
+
+        .btn-gold { background: linear-gradient(135deg, var(--gold-soft), var(--gold)); color: var(--ink); }
+        .btn-ink { background: var(--ink); color: var(--cream); }
+        .btn-ghost { background: transparent; border: 1px solid var(--line); color: var(--muted); }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr .9fr .9fr 1.1fr auto auto;
+            gap: 10px;
+            align-items: end;
+            padding: 16px 20px 14px;
+            border-bottom: 1px solid var(--line);
+            background: #fbf6ec;
+        }
+
+        .filters label {
+            display: block;
+            font-size: 11px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .filters input, .filters select {
+            width: 100%;
+            border: 1px solid var(--line);
+            background: #fff;
+            color: var(--text);
+            border-radius: 8px;
+            padding: 9px 10px;
+            font-family: inherit;
+            font-size: 13px;
+        }
+
+        .filters input:focus, .filters select:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .filter-actions { display: flex; gap: 8px; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th {
+            text-align: left;
+            font-size: 11px;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 12px 14px;
+            background: #f7efe0;
+            border-bottom: 1px solid var(--line);
+        }
+        td {
+            padding: 13px 14px;
+            border-bottom: 1px solid #f0e6d6;
+            font-size: 14px;
+        }
+        tbody tr:hover { background: #fff8ea; }
+        td.name { font-weight: 600; }
+        td.reg {
+            font-family: 'Marcellus', serif;
+            letter-spacing: .08em;
+            color: var(--maroon);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        td.total { color: var(--maroon); font-weight: 600; }
+        .phone {
+            font-variant-numeric: tabular-nums;
+            background: #f7efe0;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        .empty { text-align: center; padding: 48px 12px; color: var(--muted); }
+        .delete { color: #9a3b4a; text-decoration: none; font-size: 13px; font-weight: 500; }
+        .delete:hover { text-decoration: underline; }
+
+        .pager {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 14px 20px 18px;
+        }
+
+        .pager-meta { font-size: 13px; color: var(--muted); }
+        .pages { display: flex; gap: 6px; flex-wrap: wrap; }
+        .pages a, .pages span {
+            min-width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            border: 1px solid var(--line);
+            color: var(--text);
+            padding: 0 10px;
+            background: #fff;
+        }
+        .pages .active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+        .pages .disabled { opacity: .4; }
+
+        @media (max-width: 1200px) {
+            .filters { grid-template-columns: 1fr 1fr 1fr 1fr; }
+            .stats { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 980px) {
+            .sidebar { display: none; }
+            .main { padding: 20px 14px; }
+            .filters { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <a class="brand" href="{% url 'tukuja' %}">
+                <img src="{% static 'tukuja/edu.png' %}" alt="EduThanzeel">
+            </a>
+            <div class="nav-label">Tu Kuja</div>
+            <a class="nav-link active" href="{% url 'tukuja_dashboard' %}">RSVP Dashboard</a>
+            <a class="nav-link" href="{% url 'tukuja' %}">Event Page</a>
+            <form class="sign-out" action="/admin/logout/" method="post">
+                {% csrf_token %}
+                <button type="submit">Sign Out</button>
+            </form>
+        </aside>
+
+        <main class="main">
+            <header class="topbar">
+                <div>
+                    <div class="eyebrow">Family gathering</div>
+                    <h1>Tu Kuja, Man Kuja</h1>
+                    <p>RSVP submissions for this event only</p>
+                </div>
+                <div class="user-chip">
+                    <div class="avatar">TK</div>
+                    <div>
+                        <div class="name">{{ request.user.username }}</div>
+                        <div class="role">Tu Kuja Dashboard</div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="stats">
+                <article class="stat">
+                    <div class="label">RSVPs</div>
+                    <div class="value">{{ stats.total_rsvps }}</div>
+                </article>
+                <article class="stat">
+                    <div class="label">Members</div>
+                    <div class="value">{{ stats.total_members }}</div>
+                </article>
+                <article class="stat">
+                    <div class="label">Children</div>
+                    <div class="value">{{ stats.total_children }}</div>
+                </article>
+                <article class="stat">
+                    <div class="label">Total Attending</div>
+                    <div class="value">{{ stats.total_attending }}</div>
+                </article>
+            </section>
+
+            <section class="panel">
+                <div class="panel-head">
+                    <h2>Form submissions ({{ rsvps.paginator.count }})</h2>
+                    <a class="btn btn-gold" href="{% url 'export_tukuja_excel' %}?{{ querystring }}">Export Excel</a>
+                </div>
+
+                <form method="GET" class="filters">
+                    <div>
+                        <label for="q">Search</label>
+                        <input id="q" type="text" name="q" value="{{ filters.q }}" placeholder="ID, name or phone">
+                    </div>
+                    <div>
+                        <label for="name">Name</label>
+                        <input id="name" type="text" name="name" value="{{ filters.name }}" placeholder="Filter by name">
+                    </div>
+                    <div>
+                        <label for="phone">Phone</label>
+                        <input id="phone" type="text" name="phone" value="{{ filters.phone }}" placeholder="Filter by phone">
+                    </div>
+                    <div>
+                        <label for="date_from">From</label>
+                        <input id="date_from" type="date" name="date_from" value="{{ filters.date_from }}">
+                    </div>
+                    <div>
+                        <label for="date_to">To</label>
+                        <input id="date_to" type="date" name="date_to" value="{{ filters.date_to }}">
+                    </div>
+                    <div>
+                        <label for="members">Members</label>
+                        <select id="members" name="members">
+                            <option value="">All</option>
+                            {% for n in "12345" %}
+                            <option value="{{ n }}" {% if filters.members == n %}selected{% endif %}>{{ n }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="children">Children</label>
+                        <select id="children" name="children">
+                            <option value="">All</option>
+                            {% for n in "012345" %}
+                            <option value="{{ n }}" {% if filters.children == n %}selected{% endif %}>{{ n }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="party">Party</label>
+                        <select id="party" name="party">
+                            <option value="">All groups</option>
+                            <option value="with_children" {% if filters.party == 'with_children' %}selected{% endif %}>With children</option>
+                            <option value="members_only" {% if filters.party == 'members_only' %}selected{% endif %}>Members only</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="sort">Sort</label>
+                        <select id="sort" name="sort">
+                            <option value="-created_at" {% if filters.sort == '-created_at' %}selected{% endif %}>Newest</option>
+                            <option value="created_at" {% if filters.sort == 'created_at' %}selected{% endif %}>Oldest</option>
+                            <option value="name" {% if filters.sort == 'name' %}selected{% endif %}>Name A–Z</option>
+                            <option value="-name" {% if filters.sort == '-name' %}selected{% endif %}>Name Z–A</option>
+                            <option value="-guests" {% if filters.sort == '-guests' %}selected{% endif %}>Most guests</option>
+                            <option value="guests" {% if filters.sort == 'guests' %}selected{% endif %}>Fewest guests</option>
+                        </select>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn btn-ink" type="submit">Filter</button>
+                        {% if has_filters or filters.sort != '-created_at' %}
+                        <a class="btn btn-ghost" href="{% url 'tukuja_dashboard' %}">Clear</a>
+                        {% endif %}
+                    </div>
+                </form>
+
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Phone Number</th>
+                                <th>Members</th>
+                                <th>Children</th>
+                                <th>Total</th>
+                                <th>Submitted</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rsvp in rsvps %}
+                            <tr>
+                                <td class="reg">{{ rsvp.registration_id }}</td>
+                                <td class="name">{{ rsvp.name }}</td>
+                                <td><span class="phone">{{ rsvp.phone_number }}</span></td>
+                                <td>{{ rsvp.attending_members }}</td>
+                                <td>{{ rsvp.attending_children }}</td>
+                                <td class="total">{{ rsvp.total_attending }}</td>
+                                <td>{{ rsvp.created_at|date:"M d, Y g:i A" }}</td>
+                                <td><a class="delete" href="{% url 'delete_tukuja_rsvp' rsvp.pk %}" onclick="return confirm('Delete this RSVP?');">Delete</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="8" class="empty">No RSVPs match these filters.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pager">
+                    <div class="pager-meta">
+                        {% if rsvps.paginator.count %}
+                            Showing {{ rsvps.start_index }}–{{ rsvps.end_index }} of {{ rsvps.paginator.count }} · 25 per page
+                        {% else %}
+                            0 results · 25 per page
+                        {% endif %}
+                    </div>
+                    <nav class="pages">
+                        {% if rsvps.has_previous %}
+                            <a href="?page={{ rsvps.previous_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">Previous</a>
+                        {% else %}
+                            <span class="disabled">Previous</span>
+                        {% endif %}
+                        {% for i in rsvps.paginator.page_range %}
+                            {% if rsvps.number == i %}
+                                <span class="active">{{ i }}</span>
+                            {% else %}
+                                <a href="?page={{ i }}{% if querystring %}&{{ querystring }}{% endif %}">{{ i }}</a>
+                            {% endif %}
+                        {% endfor %}
+                        {% if rsvps.has_next %}
+                            <a href="?page={{ rsvps.next_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">Next</a>
+                        {% else %}
+                            <span class="disabled">Next</span>
+                        {% endif %}
+                    </nav>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

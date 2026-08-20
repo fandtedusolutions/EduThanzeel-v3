@@ -10,12 +10,13 @@ urlpatterns = [
     path(
         'favicon.ico',
         RedirectView.as_view(
-            url=f'{settings.STATIC_URL}admission/images/favicon.png',
-            permanent=False,
+            url=f'{settings.STATIC_URL}admission/images/favicon.ico',
+            permanent=True,
         ),
     ),
     path('admin/', admin.site.urls),
     path('', include('admissions.urls')),
+    path('tukuja/', include('program.urls')),
 ]
 
 # Custom error pages

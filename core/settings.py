@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'corsheaders',
     # Local apps
     'admissions',
+    'program',
 ]
 
 MIDDLEWARE = [
