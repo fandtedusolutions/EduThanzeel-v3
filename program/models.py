@@ -29,6 +29,11 @@ class Rsvp(models.Model):
         blank=True,
         help_text='Food batch number (100 seats each). Set when converted.',
     )
+    whatsapp_sent_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text='When the pass WhatsApp message was sent from the dashboard.',
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

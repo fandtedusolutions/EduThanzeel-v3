@@ -16,5 +16,6 @@ urlpatterns = [
     path('dashboard/edit/<int:pk>/', views.edit_tukuja_lead, name='edit_tukuja_lead'),
     path('dashboard/convert/<int:pk>/', views.mark_tukuja_converted, name='mark_tukuja_converted'),
     path('dashboard/pending/<int:pk>/', views.mark_tukuja_pending, name='mark_tukuja_pending'),
+    path('dashboard/whatsapp/<int:pk>/', views.send_tukuja_whatsapp, name='send_tukuja_whatsapp'),
     path('dashboard/delete/<int:pk>/', views.delete_tukuja_rsvp, name='delete_tukuja_rsvp'),
 ]

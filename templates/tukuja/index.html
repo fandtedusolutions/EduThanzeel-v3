@@ -795,6 +795,127 @@ background:transparent!important;
       line-height: 1.7;
     }
 
+    /* RSVP popup modal */
+    .rsvp-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 16px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .35s ease, visibility .35s ease;
+    }
+
+    .rsvp-modal.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .rsvp-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(27, 5, 18, .72);
+      backdrop-filter: blur(6px);
+    }
+
+    .rsvp-modal-dialog {
+      position: relative;
+      width: min(680px, 100%);
+      max-height: min(92vh, 860px);
+      overflow-y: auto;
+      background: linear-gradient(180deg, #2a0a1c, #1b0512);
+      border: 1px solid rgba(232, 205, 122, .28);
+      border-top: 3px solid var(--gold);
+      border-radius: 18px;
+      padding: 28px 24px 30px;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, .45);
+      transform: translateY(18px) scale(.98);
+      transition: transform .35s cubic-bezier(.16, .8, .3, 1);
+    }
+
+    .rsvp-modal.open .rsvp-modal-dialog {
+      transform: translateY(0) scale(1);
+    }
+
+    .rsvp-modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(232, 205, 122, .35);
+      border-radius: 50%;
+      background: rgba(250, 245, 234, .06);
+      color: var(--gold-light);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: background .2s ease, color .2s ease, transform .2s ease;
+      z-index: 2;
+    }
+
+    .rsvp-modal-close:hover {
+      background: rgba(201, 162, 39, .18);
+      color: var(--cream);
+      transform: scale(1.05);
+    }
+
+    .rsvp-modal-close svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .rsvp-modal-head {
+      text-align: center;
+      margin-bottom: 22px;
+      padding-right: 36px;
+    }
+
+    .rsvp-modal-head .eyebrow {
+      margin-bottom: 8px;
+    }
+
+    .rsvp-modal-head h2 {
+      font-family: 'Marcellus', serif;
+      font-size: clamp(1.45rem, 4vw, 1.9rem);
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 8px;
+    }
+
+    .rsvp-modal-head p {
+      color: rgba(250, 245, 234, .72);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .rsvp-modal .rsvp-shell {
+      max-width: none;
+      margin: 0;
+      padding: 28px 22px 24px;
+      border-width: 3px;
+    }
+
+    .rsvp-section-cta {
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 640px) {
+      .rsvp-modal-dialog {
+        padding: 24px 16px 22px;
+      }
+
+      .rsvp-modal .rsvp-shell {
+        padding: 22px 14px 18px;
+      }
+    }
+
    footer {
     background: linear-gradient(180deg, rgba(51, 0, 29, .78), rgba(27, 5, 18, .9)), url(/static/tukuja/ChatGPT%20Image%20Aug%2018%2C%202026%2C%2003_51_39%20PM.png) center / cover no-repeat;
     color: var(--blush);
@@ -1536,7 +1657,7 @@ background-repeat: no-repeat;
     </svg>
 
     <div class="hero-inner reveal in">
-      <div class="eyebrow">How high You are, and how far below I remain</div>
+      <div class="eyebrow">Souls resonate as one</div>
 <div class="logo-wrapper">
     <img src="{% static 'tukuja/borderrr.png' %}" alt="EduThanzeel">
 </div>
@@ -1548,7 +1669,7 @@ background-repeat: no-repeat;
     <div class="wrap about-grid">
      
       <div class="about-copy reveal">
-       <h1 class="hero-title">An <em>Ishal Night</em><br>EduThanzeel Family Gathering</h1>
+       <h1 class="hero-title">A cherished <em>gathering where</em><br>souls resonate as one</h1>
         <div class="chip-row">
         <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6">
             <rect x="3" y="5" width="18" height="16" rx="1" />
@@ -1660,7 +1781,7 @@ const guests = [
   { name: "Sayyid Munavvar Ali Shihab Thangal", role: "Prominent member of the Panakkad family; Muslim Youth League Kerala & IUML National Committee", photo: "{% static 'tukuja/munavvar.webp' %}" },
   { name: "Khalil Thangal", role: "Belonging to the distinguished Bukhari family lineage", photo: "{% static 'tukuja/kaleel.webp' %}" },
   { name: "Habeeb Bukhari Thangal", role: "Distinguished member of the Bukhari Thangal lineage", photo: "{% static 'tukuja/habeeb.webp' %}" },
-  { name: "Syed Zainul Abedin", role: "Ajmer Diwan — Dewan and Sajjada Nasheen of Ajmer Sharif Dargah", photo: "{% static 'tukuja/abid.webp' %}" },
+  { name: "Aulad-E-Khwaja Garib Nawaz", role: "Ajmer Diwan — Dewan and Sajjada Nasheen of Ajmer Sharif Dargah", photo: "{% static 'tukuja/gust.jpeg' %}" },
   { name: "Syed Usama Shaban Bukhari", role: "14th Shahi Imam of Delhi Jama Masjid", photo: "{% static 'tukuja/delhi.webp' %}" },
 ];
  
@@ -1753,7 +1874,27 @@ for(let i=0;i<COUNT;i++){
         <p>Just a minute is all it takes to reserve your seat for an evening where hearts connect and souls find serenity.</p>
       </div>
 
-      <div class="rsvp-shell reveal">
+      <div class="rsvp-section-cta reveal">
+        <button type="button" class="btn btn-gold" id="rsvpOpenBtn">Reserve Your Seats</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="rsvp-modal" id="rsvpModal" aria-hidden="true" role="dialog" aria-labelledby="rsvpModalTitle">
+    <div class="rsvp-modal-backdrop" id="rsvpModalBackdrop"></div>
+    <div class="rsvp-modal-dialog">
+      <button type="button" class="rsvp-modal-close" id="rsvpModalClose" aria-label="Close registration form">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 6l12 12M18 6L6 18"/>
+        </svg>
+      </button>
+      <div class="rsvp-modal-head">
+        <div class="eyebrow">Join Us</div>
+        <h2 id="rsvpModalTitle">Reserve Your Seat with Family</h2>
+        <p>Just a minute is all it takes to reserve your seat for an evening where hearts connect and souls find serenity.</p>
+      </div>
+
+      <div class="rsvp-shell">
         <form id="rsvpForm">
           {% csrf_token %}
           <div class="form-row">
@@ -1795,7 +1936,7 @@ for(let i=0;i<COUNT;i++){
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
    <footer>
     <div class="wrap">
@@ -1818,6 +1959,7 @@ where souls resonate as one.</p>
       entryGate.classList.add('hidden');
       soundToggle.classList.add('visible');
       document.body.style.overflow = '';
+      scheduleRsvpPopup();
     });
 
     soundToggle.addEventListener('click', () => {
@@ -1860,6 +2002,64 @@ where souls resonate as one.</p>
       });
     }, { threshold: 0.15 });
     revealEls.forEach(el => io.observe(el));
+
+    // RSVP popup modal
+    const rsvpModal = document.getElementById('rsvpModal');
+    const rsvpModalClose = document.getElementById('rsvpModalClose');
+    const rsvpModalBackdrop = document.getElementById('rsvpModalBackdrop');
+    const rsvpOpenBtn = document.getElementById('rsvpOpenBtn');
+    const RSVP_POPUP_DELAY_MS = 7000;
+    let rsvpPopupTimer = null;
+
+    function canAutoShowRsvpPopup() {
+      const successEl = document.getElementById('rsvpSuccess');
+      return !sessionStorage.getItem('rsvpPopupDismissed')
+        && !(successEl && successEl.classList.contains('show'));
+    }
+
+    function openRsvpModal() {
+      rsvpModal.classList.add('open');
+      rsvpModal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeRsvpModal(markDismissed) {
+      rsvpModal.classList.remove('open');
+      rsvpModal.setAttribute('aria-hidden', 'true');
+      if (entryGate.classList.contains('hidden')) {
+        document.body.style.overflow = '';
+      }
+      if (markDismissed) {
+        sessionStorage.setItem('rsvpPopupDismissed', '1');
+      }
+    }
+
+    function scheduleRsvpPopup() {
+      if (!canAutoShowRsvpPopup()) return;
+      clearTimeout(rsvpPopupTimer);
+      rsvpPopupTimer = setTimeout(() => {
+        if (canAutoShowRsvpPopup() && !rsvpModal.classList.contains('open')) {
+          openRsvpModal();
+        }
+      }, RSVP_POPUP_DELAY_MS);
+    }
+
+    rsvpModalClose.addEventListener('click', () => closeRsvpModal(true));
+    rsvpModalBackdrop.addEventListener('click', () => closeRsvpModal(true));
+    rsvpOpenBtn.addEventListener('click', openRsvpModal);
+
+    document.querySelectorAll('a[href="#rsvp"]').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        openRsvpModal();
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && rsvpModal.classList.contains('open')) {
+        closeRsvpModal(true);
+      }
+    });
 
     // RSVP form
     const form = document.getElementById('rsvpForm');
@@ -1998,6 +2198,7 @@ where souls resonate as one.</p>
           }
           form.style.display = 'none';
           success.classList.add('show');
+          sessionStorage.setItem('rsvpPopupDismissed', '1');
           return;
         }
 

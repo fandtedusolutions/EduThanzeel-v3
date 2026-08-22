@@ -1,0 +1,10 @@
+<a class="nav-link {% if nav_page == 'dashboard' %}active{% endif %}" href="{% url 'tukuja_dashboard' %}">Dashboard</a>
+<a class="nav-link nav-link-badge {% if nav_page == 'leads' %}active{% endif %}" href="{% url 'tukuja_leads' %}">
+    <span>Leads</span>
+    {% if tukuja_pending_count %}
+    <span class="nav-badge" title="{{ tukuja_pending_count }} new lead{{ tukuja_pending_count|pluralize }}">{{ tukuja_pending_count }}</span>
+    {% endif %}
+</a>
+<a class="nav-link {% if nav_page == 'converted' %}active{% endif %}" href="{% url 'tukuja_converted' %}">Converted</a>
+<a class="nav-link {% if nav_page == 'food_batch' %}active{% endif %}" href="{% url 'tukuja_food_batch' %}">Food Batch</a>
+<a class="nav-link" href="{% url 'tukuja' %}">Event Page</a>

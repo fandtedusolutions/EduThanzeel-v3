@@ -5,116 +5,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ lead.registration_id }} · Tu Kuja Coupon</title>
+    <title>{{ lead.registration_id }} · Registration Detail</title>
     <link rel="icon" href="{% static 'admission/images/favicon.ico' %}" sizes="any">
-    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Marcellus&display=swap" rel="stylesheet">
     <style>
         :root {
             --ink: #12020c;
             --maroon: #5c0135;
+            --maroon-soft: #7a1848;
             --gold: #c9a227;
             --cream: #faf5ea;
+            --field: #f3e8ef;
+            --field-label: #7a1848;
+            --line: rgba(92, 1, 53, .14);
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
             min-height: 100vh;
             font-family: 'Jost', sans-serif;
-            color: var(--cream);
+            color: var(--ink);
             background:
-                radial-gradient(ellipse 70% 50% at 50% 0%, rgba(154, 0, 88, .28), transparent 65%),
-                linear-gradient(180deg, #1b0512, #33001d 55%, #1b0512);
-            padding: 28px 16px 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+                radial-gradient(ellipse 80% 40% at 50% 0%, rgba(92, 1, 53, .08), transparent 60%),
+                linear-gradient(180deg, #fff8f2, #faf5ea 40%, #f3e8ef);
+            padding: 28px 16px 48px;
         }
-        .intro { max-width: 720px; text-align: center; margin-bottom: 20px; }
-        .intro .brand { height: 42px; width: auto; margin: 0 auto 14px; display: block; }
-        .intro h1 {
-            font-family: 'Marcellus', serif;
-            font-size: clamp(1.35rem, 4vw, 1.8rem);
-            font-weight: 400;
-            margin-bottom: 8px;
-        }
-        .intro p { color: rgba(250, 245, 234, .8); font-size: 14px; line-height: 1.7; }
-        .coupon-wrap {
+
+        .shell {
             width: min(920px, 100%);
-            border-radius: 14px;
-            overflow: hidden;
-            box-shadow: 0 28px 70px rgba(0, 0, 0, .45);
+            margin: 0 auto;
             background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 28px 28px 32px;
+            box-shadow: 0 18px 50px rgba(18, 2, 12, .08);
         }
-        .coupon-wrap img {
+
+        .brand-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .brand-row img {
+            height: 40px;
+            width: auto;
+        }
+
+        .brand-row .id-chip {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: .04em;
+            color: var(--maroon);
+            background: var(--field);
+            border: 1px solid rgba(92, 1, 53, .12);
+            border-radius: 999px;
+            padding: 8px 14px;
+        }
+
+        h1 {
+            font-family: 'Marcellus', serif;
+            font-size: clamp(1.55rem, 4vw, 2rem);
+            font-weight: 400;
+            color: var(--maroon);
+            margin-bottom: 18px;
+        }
+
+        .fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 16px;
+            margin-bottom: 22px;
+        }
+
+        .field {
+            background: var(--field);
+            border-radius: 12px;
+            padding: 12px 14px 13px;
+            min-width: 0;
+        }
+
+        .field .label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--field-label);
+            margin-bottom: 4px;
+        }
+
+        .field .value {
+            display: block;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--ink);
+            word-break: break-word;
+            line-height: 1.35;
+        }
+
+        .coupon-panel {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+
+        .coupon-panel img {
             display: block;
             width: 100%;
             height: auto;
+            border-radius: 8px;
         }
-        .meta {
-            margin-top: 18px;
-            text-align: center;
-            color: rgba(250, 245, 234, .85);
-            font-size: 14px;
-            line-height: 1.7;
-        }
-        .meta strong { color: #e8cd7a; }
+
         .actions {
-            margin-top: 20px;
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            justify-content: center;
+            align-items: center;
         }
+
         .btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
-            padding: 12px 18px;
-            border-radius: 999px;
+            min-height: 44px;
+            padding: 0 20px;
+            border-radius: 10px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 15px;
             border: none;
             cursor: pointer;
         }
-        .btn-gold {
-            background: linear-gradient(135deg, #e8cd7a, #c9a227);
-            color: var(--ink);
-        }
-        .btn-wp {
-            background: #25d366;
+
+        .btn-download {
+            background: var(--maroon);
             color: #fff;
         }
-        .btn-ghost {
-            background: rgba(250, 245, 234, .1);
-            color: var(--cream);
-            border: 1px solid rgba(232, 205, 122, .35);
+
+        .btn-download:hover { background: var(--maroon-soft); }
+
+        .hint {
+            margin-top: 14px;
+            font-size: 13px;
+            color: #6b5a63;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 640px) {
+            .shell { padding: 20px 16px 24px; }
+            .fields { grid-template-columns: 1fr; }
+            .brand-row { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
 
 <body>
-    <div class="intro">
-        <img class="brand" src="{% static 'tukuja/logo-tukujamankuja.png' %}" alt="Tu Kuja Man Kuja">
-        <h1>Your event coupon</h1>
-        <p>Show this coupon at entry. Scan the QR on the stub to verify guest details and food batch.</p>
-    </div>
-
-    <div class="coupon-wrap">
-        <img src="{{ coupon_image_url }}" alt="Coupon {{ lead.registration_id }}">
-    </div>
-
-    <div class="meta">
-        <div><strong>{{ lead.registration_id }}</strong> · {{ lead.name }}</div>
-        <div>
-            {% if lead.food_batch %}Food Batch {{ lead.food_batch }}{% else %}Food batch pending{% endif %}
-            · {{ lead.total_attending }} seat{{ lead.total_attending|pluralize }}
+    <div class="shell">
+        <div class="brand-row">
+            <img src="{% static 'tukuja/logo-tukujamankuja.png' %}" alt="Tu Kuja Man Kuja">
+            <span class="id-chip">{{ lead.registration_id }}</span>
         </div>
-    </div>
 
-    <div class="actions">
-        <a class="btn btn-gold" href="{{ coupon_image_url }}" download="{{ lead.registration_id }}-coupon.jpg">Download image</a>
-        <a class="btn btn-wp" href="{{ whatsapp_url }}" target="_blank" rel="noopener">Send on WhatsApp</a>
-        <a class="btn btn-ghost" href="{{ scan_url }}">Open scan page</a>
+        <h1>Registration Detail</h1>
+
+        <div class="fields">
+            <div class="field">
+                <span class="label">Reg No</span>
+                <span class="value">{{ lead.registration_id }}</span>
+            </div>
+            <div class="field">
+                <span class="label">Name</span>
+                <span class="value">{{ lead.name }}</span>
+            </div>
+            <div class="field">
+                <span class="label">Phone</span>
+                <span class="value">{{ lead.phone_number }}</span>
+            </div>
+            <div class="field">
+                <span class="label">WhatsApp</span>
+                <span class="value">{{ lead.phone_number }}</span>
+            </div>
+            <div class="field">
+                <span class="label">Adults</span>
+                <span class="value">{{ lead.attending_members }}</span>
+            </div>
+            <div class="field">
+                <span class="label">Children</span>
+                <span class="value">{{ lead.attending_children }}</span>
+            </div>
+            <div class="field">
+                <span class="label">Total Seats</span>
+                <span class="value">{{ lead.total_attending }}</span>
+            </div>
+            <div class="field">
+                <span class="label">Food Batch</span>
+                <span class="value">{% if lead.food_batch %}Batch {{ lead.food_batch }}{% else %}Not assigned{% endif %}</span>
+            </div>
+            <div class="field">
+                <span class="label">Status</span>
+                <span class="value">{{ lead.get_status_display }}</span>
+            </div>
+            <div class="field">
+                <span class="label">Registered On</span>
+                <span class="value">{{ lead.created_at|date:"M d, Y g:i A" }}</span>
+            </div>
+        </div>
+
+        <div class="coupon-panel">
+            <img src="{{ coupon_image_url }}" alt="Coupon {{ lead.registration_id }}">
+        </div>
+
+        <div class="actions">
+            <a class="btn btn-download" href="{{ coupon_download_url|default:coupon_image_url }}" download="{{ lead.registration_id }}-coupon.jpg">Download Coupon</a>
+        </div>
+
+        <p class="hint">Scan the QR on the coupon stub to open this registration detail page.</p>
     </div>
 </body>
 

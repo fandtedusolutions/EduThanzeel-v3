@@ -76,6 +76,29 @@
             box-shadow: inset 3px 0 0 var(--gold);
         }
 
+        .nav-link-badge {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .nav-badge {
+            min-width: 22px;
+            height: 22px;
+            padding: 0 7px;
+            border-radius: 999px;
+            background: var(--gold);
+            color: var(--ink);
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 22px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .nav-link.active .nav-badge { background: var(--gold-soft); }
+
         .sign-out { margin-top: auto; }
         .sign-out button {
             width: 100%;
@@ -261,11 +284,7 @@
                 <img src="{% static 'tukuja/edu.png' %}" alt="EduThanzeel">
             </a>
             <div class="nav-label">Tu Kuja</div>
-            <a class="nav-link active" href="{% url 'tukuja_dashboard' %}">Dashboard</a>
-            <a class="nav-link" href="{% url 'tukuja_leads' %}">Leads</a>
-            <a class="nav-link" href="{% url 'tukuja_converted' %}">Converted</a>
-            <a class="nav-link" href="{% url 'tukuja_food_batch' %}">Food Batch</a>
-            <a class="nav-link" href="{% url 'tukuja' %}">Event Page</a>
+            {% include 'tukuja/_sidebar_nav.html' %}
             <form class="sign-out" action="/admin/logout/" method="post">
                 {% csrf_token %}
                 <button type="submit">Sign Out</button>

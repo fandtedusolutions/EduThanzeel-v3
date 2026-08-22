@@ -68,6 +68,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'admissions.context_processors.brochure_context',
+                'program.context_processors.tukuja_nav',
             ],
         },
     },

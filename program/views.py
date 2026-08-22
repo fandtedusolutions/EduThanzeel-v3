@@ -5,16 +5,20 @@ from django.http import HttpResponse, FileResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.urls import reverse
+from django.utils import timezone
 from urllib.parse import quote
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+import logging
 import openpyxl
 from openpyxl.styles import Font
 
 from .models import Rsvp
 from .serializers import RsvpSerializer
 from .coupon_utils import build_coupon_image
+
+logger = logging.getLogger(__name__)
 
 
 def tukuja(request):
@@ -25,12 +29,13 @@ def _absolute(request, name, **kwargs):
     return request.build_absolute_uri(reverse(name, kwargs=kwargs))
 
 
-def _pass_absolute_url(request, registration_id):
+def _detail_absolute_url(request, registration_id):
+    """Public registration detail page (WhatsApp + QR target)."""
     return _absolute(request, 'tukuja_coupon', registration_id=registration_id)
 
 
-def _scan_absolute_url(request, registration_id):
-    return _absolute(request, 'tukuja_scan', registration_id=registration_id)
+def _pass_absolute_url(request, registration_id):
+    return _detail_absolute_url(request, registration_id)
 
 
 def _coupon_image_absolute_url(request, registration_id):
@@ -38,24 +43,32 @@ def _coupon_image_absolute_url(request, registration_id):
 
 
 def _ensure_coupon(request, lead, force=False):
-    scan_url = _scan_absolute_url(request, lead.registration_id)
-    return build_coupon_image(lead, scan_url, force=force)
+    """Build coupon image; return path or None if generation fails."""
+    detail_url = _detail_absolute_url(request, lead.registration_id)
+    try:
+        return build_coupon_image(lead, detail_url, force=force)
+    except Exception:
+        logger.exception('Coupon generation failed for %s', lead.registration_id)
+        return None
 
 
 def _whatsapp_share_url(request, lead):
-    """WhatsApp opens with the coupon image link (recipient can open/share the image)."""
-    _ensure_coupon(request, lead)
-    image_url = _coupon_image_absolute_url(request, lead.registration_id)
+    """WhatsApp message: greeting + line break + pass link (no image build here)."""
+    detail_url = _detail_absolute_url(request, lead.registration_id)
     phone = ''.join(ch for ch in (lead.phone_number or '') if ch.isdigit())
-    return f'https://wa.me/{phone}?text={quote(image_url)}'
+    message = (
+        f'Your journey to TU KUJA MAN KUJA,\n'
+        f'pass : {detail_url}'
+    )
+    return f'https://wa.me/{phone}?text={quote(message)}'
 
 
 def _attach_share_links(request, leads):
     for lead in leads:
-        lead.pass_url = _pass_absolute_url(request, lead.registration_id)
+        lead.pass_url = _detail_absolute_url(request, lead.registration_id)
         lead.coupon_image_url = _coupon_image_absolute_url(request, lead.registration_id)
-        lead.scan_url = _scan_absolute_url(request, lead.registration_id)
         lead.whatsapp_url = _whatsapp_share_url(request, lead)
+        lead.whatsapp_send_url = reverse('send_tukuja_whatsapp', kwargs={'pk': lead.pk})
     return leads
 
 
@@ -64,34 +77,34 @@ def tukuja_pass(request, registration_id):
 
 
 def tukuja_coupon(request, registration_id):
+    """Registration detail page: guest fields + coupon + download."""
     lead = get_object_or_404(Rsvp, registration_id=registration_id)
-    _ensure_coupon(request, lead)
+    path = _ensure_coupon(request, lead)
+    cache_bust = int(path.stat().st_mtime) if path and path.exists() else 0
+    image_url = _coupon_image_absolute_url(request, lead.registration_id)
     return render(request, 'tukuja/coupon.html', {
         'lead': lead,
-        'coupon_image_url': _coupon_image_absolute_url(request, lead.registration_id),
-        'scan_url': _scan_absolute_url(request, lead.registration_id),
-        'whatsapp_url': _whatsapp_share_url(request, lead),
+        'coupon_image_url': f'{image_url}?v={cache_bust}' if path else '',
+        'coupon_download_url': image_url if path else '',
+        'detail_url': _detail_absolute_url(request, lead.registration_id),
+        'coupon_error': path is None,
     })
 
 
 def tukuja_coupon_image(request, registration_id):
     lead = get_object_or_404(Rsvp, registration_id=registration_id)
     path = _ensure_coupon(request, lead)
-    if not path.exists():
+    if not path or not path.exists():
         raise Http404('Coupon image not found')
     response = FileResponse(open(path, 'rb'), content_type='image/jpeg')
     response['Content-Disposition'] = f'inline; filename="{lead.registration_id}-coupon.jpg"'
-    response['Cache-Control'] = 'public, max-age=300'
+    response['Cache-Control'] = 'no-cache, max-age=0, must-revalidate'
     return response
 
 
 def tukuja_scan(request, registration_id):
-    """QR scan landing page: guest data + food batch."""
-    lead = get_object_or_404(Rsvp, registration_id=registration_id)
-    return render(request, 'tukuja/scan.html', {
-        'lead': lead,
-        'coupon_image_url': _coupon_image_absolute_url(request, lead.registration_id),
-    })
+    """Old QR URLs redirect to the registration detail page."""
+    return redirect('tukuja_coupon', registration_id=registration_id)
 
 
 @api_view(['POST'])
@@ -388,7 +401,8 @@ def edit_tukuja_lead(request, pk):
                 lead.food_batch = None
             lead.save()
             if new_status == Rsvp.STATUS_CONVERTED:
-                _ensure_coupon(request, lead, force=True)
+                if _ensure_coupon(request, lead, force=True) is None:
+                    messages.warning(request, f'{lead.registration_id} saved, but coupon image could not be generated.')
             messages.success(request, f'{lead.registration_id} updated.')
             if new_status == Rsvp.STATUS_CONVERTED:
                 return redirect('tukuja_converted')
@@ -414,7 +428,8 @@ def mark_tukuja_converted(request, pk):
         lead.status = Rsvp.STATUS_CONVERTED
         lead.food_batch = batch_number
         lead.save(update_fields=['status', 'food_batch', 'updated_at'])
-        _ensure_coupon(request, lead, force=True)
+        if _ensure_coupon(request, lead, force=True) is None:
+            messages.warning(request, f'{lead.registration_id} converted, but coupon image could not be generated.')
         filled = usage['used'] + lead.total_attending
         messages.success(
             request,
@@ -427,11 +442,21 @@ def mark_tukuja_converted(request, pk):
 
 
 @login_required
+def send_tukuja_whatsapp(request, pk):
+    lead = get_object_or_404(Rsvp, pk=pk, status=Rsvp.STATUS_CONVERTED)
+    if not lead.whatsapp_sent_at:
+        lead.whatsapp_sent_at = timezone.now()
+        lead.save(update_fields=['whatsapp_sent_at', 'updated_at'])
+    return redirect(_whatsapp_share_url(request, lead))
+
+
+@login_required
 def mark_tukuja_pending(request, pk):
     lead = get_object_or_404(Rsvp, pk=pk)
     lead.status = Rsvp.STATUS_PENDING
     lead.food_batch = None
-    lead.save(update_fields=['status', 'food_batch', 'updated_at'])
+    lead.whatsapp_sent_at = None
+    lead.save(update_fields=['status', 'food_batch', 'whatsapp_sent_at', 'updated_at'])
     messages.success(request, f'{lead.registration_id} moved back to leads.')
     return redirect('tukuja_leads')
 

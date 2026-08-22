@@ -1,9 +1,12 @@
 from io import BytesIO
 from pathlib import Path
+import logging
 
 import qrcode
 from django.conf import settings
 from PIL import Image, ImageDraw, ImageFont
+
+logger = logging.getLogger(__name__)
 
 
 COUPON_TEMPLATE = Path(settings.BASE_DIR) / 'static' / 'tukuja' / 'coupon.jpeg'
@@ -41,54 +44,82 @@ def coupon_cache_path(registration_id):
 def build_coupon_image(lead, scan_url, force=False):
     """
     Compose personalized coupon from template with QR + guest details
-    on the white stub area (right side).
+    centered on the white stub area (right side).
     """
     out_path = coupon_cache_path(lead.registration_id)
     if out_path.exists() and not force:
         return out_path
 
-    base = Image.open(COUPON_TEMPLATE).convert('RGB')
-    width, height = base.size  # 2207 x 827
+    if not COUPON_TEMPLATE.exists():
+        logger.error('Coupon template missing: %s', COUPON_TEMPLATE)
+        raise FileNotFoundError(f'Coupon template not found: {COUPON_TEMPLATE}')
 
-    # White stub roughly x: 1480–1830
-    stub_left, stub_right = 1488, 1828
-    stub_center_x = (stub_left + stub_right) // 2
+    try:
+        base = Image.open(COUPON_TEMPLATE).convert('RGB')
+    except OSError as exc:
+        logger.exception('Could not open coupon template')
+        raise exc
+    # Measured white stub on coupon.jpeg (2207x827)
+    stub_left, stub_right = 1375, 1835
+    stub_top, stub_bottom = 132, 694
+    stub_center_x = (stub_left + stub_right) // 2  # 1605
+    stub_center_y = (stub_top + stub_bottom) // 2  # 413
     stub_width = stub_right - stub_left
 
-    qr_size = min(300, stub_width - 40)
-    qr = _make_qr(scan_url, box_size=7, border=1).resize((qr_size, qr_size), Image.Resampling.NEAREST)
-    qr_x = stub_center_x - qr_size // 2
-    qr_y = 95
-    base.paste(qr, (qr_x, qr_y))
-
-    draw = ImageDraw.Draw(base)
     title_font = _font(28, bold=True)
     meta_font = _font(22, bold=False)
-    small_font = _font(18, bold=False)
-    ink = '#1b0512'
-    maroon = '#5c0135'
-
-    def center_text(text, y, font, fill=ink):
-        bbox = draw.textbbox((0, 0), text, font=font)
-        tw = bbox[2] - bbox[0]
-        draw.text((stub_center_x - tw // 2, y), text, font=font, fill=fill)
-
-    text_top = qr_y + qr_size + 18
-    center_text(lead.registration_id, text_top, title_font, maroon)
 
     name = (lead.name or '').strip()
     if len(name) > 22:
         name = name[:20] + '…'
-    center_text(name, text_top + 36, meta_font, ink)
+    lines = [
+        (lead.registration_id, title_font, '#5c0135'),
+        (name, meta_font, '#1b0512'),
+    ]
 
-    batch_label = f'Food Batch {lead.food_batch}' if lead.food_batch else 'Food Batch —'
-    center_text(batch_label, text_top + 68, small_font, maroon)
+    line_gap = 8
+    text_h = 0
+    line_heights = []
+    for text, font, _fill in lines:
+        bbox = font.getbbox(text)
+        lh = bbox[3] - bbox[1]
+        line_heights.append(lh)
+        text_h += lh
+    text_h += line_gap * (len(lines) - 1)
 
-    seats = f'{lead.total_attending} seat{"s" if lead.total_attending != 1 else ""}'
-    center_text(seats, text_top + 94, small_font, ink)
+    # QR itself is centered on the white stub; ID + name sit just under it.
+    gap = 14
+    bottom_pad = 28
+    qr_size = min(260, stub_width - 64, 2 * (stub_center_y - stub_top - 20))
+    while qr_size > 160:
+        qr_bottom = stub_center_y + qr_size // 2
+        if qr_bottom + gap + text_h + bottom_pad <= stub_bottom:
+            break
+        qr_size -= 8
 
-    base.save(out_path, format='JPEG', quality=92, optimize=True)
+    qr = _make_qr(scan_url, box_size=7, border=1).resize(
+        (qr_size, qr_size), Image.Resampling.NEAREST
+    )
+    qr_x = stub_center_x - qr_size // 2
+    qr_y = stub_center_y - qr_size // 2
+    base.paste(qr, (qr_x, qr_y))
+
+    draw = ImageDraw.Draw(base)
+    y = qr_y + qr_size + gap
+    for (text, font, fill), lh in zip(lines, line_heights):
+        bbox = draw.textbbox((0, 0), text, font=font)
+        tw = bbox[2] - bbox[0]
+        draw.text((stub_center_x - tw // 2, y), text, font=font, fill=fill)
+        y += lh + line_gap
+
+    try:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        base.save(out_path, format='JPEG', quality=92, optimize=True)
+    except OSError as exc:
+        logger.exception('Could not save coupon image to %s', out_path)
+        raise exc
     return out_path
+
 
 
 def coupon_image_bytes(lead, scan_url, force=False):
