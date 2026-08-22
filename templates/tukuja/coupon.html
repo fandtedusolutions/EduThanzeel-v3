@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ lead.registration_id }} · Tu Kuja Coupon</title>
+    <link rel="icon" href="{% static 'admission/images/favicon.ico' %}" sizes="any">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #12020c;
+            --maroon: #5c0135;
+            --gold: #c9a227;
+            --cream: #faf5ea;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            min-height: 100vh;
+            font-family: 'Jost', sans-serif;
+            color: var(--cream);
+            background:
+                radial-gradient(ellipse 70% 50% at 50% 0%, rgba(154, 0, 88, .28), transparent 65%),
+                linear-gradient(180deg, #1b0512, #33001d 55%, #1b0512);
+            padding: 28px 16px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .intro { max-width: 720px; text-align: center; margin-bottom: 20px; }
+        .intro .brand { height: 42px; width: auto; margin: 0 auto 14px; display: block; }
+        .intro h1 {
+            font-family: 'Marcellus', serif;
+            font-size: clamp(1.35rem, 4vw, 1.8rem);
+            font-weight: 400;
+            margin-bottom: 8px;
+        }
+        .intro p { color: rgba(250, 245, 234, .8); font-size: 14px; line-height: 1.7; }
+        .coupon-wrap {
+            width: min(920px, 100%);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 28px 70px rgba(0, 0, 0, .45);
+            background: #fff;
+        }
+        .coupon-wrap img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .meta {
+            margin-top: 18px;
+            text-align: center;
+            color: rgba(250, 245, 234, .85);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .meta strong { color: #e8cd7a; }
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 18px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, #e8cd7a, #c9a227);
+            color: var(--ink);
+        }
+        .btn-wp {
+            background: #25d366;
+            color: #fff;
+        }
+        .btn-ghost {
+            background: rgba(250, 245, 234, .1);
+            color: var(--cream);
+            border: 1px solid rgba(232, 205, 122, .35);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="intro">
+        <img class="brand" src="{% static 'tukuja/logo-tukujamankuja.png' %}" alt="Tu Kuja Man Kuja">
+        <h1>Your event coupon</h1>
+        <p>Show this coupon at entry. Scan the QR on the stub to verify guest details and food batch.</p>
+    </div>
+
+    <div class="coupon-wrap">
+        <img src="{{ coupon_image_url }}" alt="Coupon {{ lead.registration_id }}">
+    </div>
+
+    <div class="meta">
+        <div><strong>{{ lead.registration_id }}</strong> · {{ lead.name }}</div>
+        <div>
+            {% if lead.food_batch %}Food Batch {{ lead.food_batch }}{% else %}Food batch pending{% endif %}
+            · {{ lead.total_attending }} seat{{ lead.total_attending|pluralize }}
+        </div>
+    </div>
+
+    <div class="actions">
+        <a class="btn btn-gold" href="{{ coupon_image_url }}" download="{{ lead.registration_id }}-coupon.jpg">Download image</a>
+        <a class="btn btn-wp" href="{{ whatsapp_url }}" target="_blank" rel="noopener">Send on WhatsApp</a>
+        <a class="btn btn-ghost" href="{{ scan_url }}">Open scan page</a>
+    </div>
+</body>
+
+</html>

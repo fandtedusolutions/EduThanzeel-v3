@@ -10,7 +10,9 @@ class RsvpAdmin(admin.ModelAdmin):
         'phone_number',
         'attending_members',
         'attending_children',
+        'status',
+        'food_batch',
         'created_at',
     )
     search_fields = ('registration_id', 'name', 'phone_number')
-    list_filter = ('created_at',)
+    list_filter = ('status', 'food_batch', 'created_at')

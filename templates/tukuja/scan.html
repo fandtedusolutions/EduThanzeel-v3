@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan {{ lead.registration_id }} · Tu Kuja</title>
+    <link rel="icon" href="{% static 'admission/images/favicon.ico' %}" sizes="any">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #12020c;
+            --maroon: #5c0135;
+            --gold: #c9a227;
+            --cream: #faf5ea;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            min-height: 100vh;
+            font-family: 'Jost', sans-serif;
+            color: var(--ink);
+            background: #faf5ea;
+            padding: 24px 16px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card {
+            width: min(480px, 100%);
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 16px 40px rgba(18, 2, 12, .12);
+            overflow: hidden;
+            border: 1px solid rgba(92, 1, 53, .08);
+        }
+        .head {
+            background: linear-gradient(135deg, #5c0135, #1b0512);
+            color: var(--cream);
+            padding: 22px 22px 18px;
+            text-align: center;
+        }
+        .head .brand { height: 36px; width: auto; margin: 0 auto 12px; display: block; }
+        .head h1 {
+            font-family: 'Marcellus', serif;
+            font-size: 1.35rem;
+            font-weight: 400;
+            margin-bottom: 6px;
+        }
+        .head .id {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(232, 205, 122, .18);
+            color: #e8cd7a;
+            font-weight: 600;
+            letter-spacing: .04em;
+        }
+        .body { padding: 20px 22px 24px; }
+        .batch {
+            text-align: center;
+            background: #f7efe0;
+            border: 1px solid rgba(201, 162, 39, .35);
+            border-radius: 14px;
+            padding: 16px 14px;
+            margin-bottom: 18px;
+        }
+        .batch .label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: #7a5a20;
+            margin-bottom: 4px;
+        }
+        .batch .value {
+            font-family: 'Marcellus', serif;
+            font-size: 1.8rem;
+            color: var(--maroon);
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(18, 2, 12, .08);
+            font-size: 15px;
+        }
+        .row:last-child { border-bottom: none; }
+        .row span { color: #6b5a63; }
+        .row strong { color: var(--ink); text-align: right; }
+        .coupon-mini {
+            margin-top: 18px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(92, 1, 53, .1);
+        }
+        .coupon-mini img { display: block; width: 100%; height: auto; }
+        .foot {
+            margin-top: 16px;
+            text-align: center;
+            font-size: 13px;
+            color: #7a6a72;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="head">
+            <img class="brand" src="{% static 'tukuja/logo-tukujamankuja.png' %}" alt="Tu Kuja Man Kuja">
+            <h1>Guest verified</h1>
+            <div class="id">{{ lead.registration_id }}</div>
+        </div>
+        <div class="body">
+            <div class="batch">
+                <div class="label">Food batch</div>
+                <div class="value">{% if lead.food_batch %}Batch {{ lead.food_batch }}{% else %}Not assigned{% endif %}</div>
+            </div>
+            <div class="row"><span>Name</span><strong>{{ lead.name }}</strong></div>
+            <div class="row"><span>Phone</span><strong>{{ lead.phone_number }}</strong></div>
+            <div class="row"><span>Adults</span><strong>{{ lead.attending_members }}</strong></div>
+            <div class="row"><span>Children</span><strong>{{ lead.attending_children }}</strong></div>
+            <div class="row"><span>Total seats</span><strong>{{ lead.total_attending }}</strong></div>
+            <div class="row"><span>Status</span><strong>{{ lead.get_status_display }}</strong></div>
+            <div class="coupon-mini">
+                <img src="{{ coupon_image_url }}" alt="Coupon {{ lead.registration_id }}">
+            </div>
+            <p class="foot">Scanned from QR on the guest coupon stub.</p>
+        </div>
+    </div>
+</body>
+
+</html>

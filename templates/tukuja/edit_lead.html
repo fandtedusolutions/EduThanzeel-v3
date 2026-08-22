@@ -1,0 +1,190 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit {{ lead.registration_id }} | Tu Kuja</title>
+    <link rel="icon" href="{% static 'admission/images/favicon.ico' %}" sizes="any">
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1b0512;
+            --maroon: #5c0135;
+            --gold: #c9a227;
+            --gold-soft: #e8cd7a;
+            --cream: #faf5ea;
+            --paper: #fffdf8;
+            --line: #eadcc4;
+            --text: #2a1620;
+            --muted: #7a5d68;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Jost', sans-serif;
+            background:
+                radial-gradient(ellipse 80% 40% at 100% 0%, rgba(201, 162, 39, .12), transparent 55%),
+                var(--cream);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .wrap {
+            max-width: 640px;
+            margin: 0 auto;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 28px;
+        }
+
+        .eyebrow {
+            color: var(--gold);
+            font-size: 11px;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            font-family: 'Marcellus', serif;
+            font-size: 1.7rem;
+            font-weight: 400;
+            margin-bottom: 6px;
+        }
+
+        .sub { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+
+        .reg {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 6px 12px;
+            border: 1px solid var(--gold);
+            color: var(--maroon);
+            font-family: 'Marcellus', serif;
+            letter-spacing: .08em;
+        }
+
+        .error {
+            background: #fdeeee;
+            border: 1px solid #efc0c0;
+            color: #9a3b4a;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .field { margin-bottom: 16px; }
+        .field label {
+            display: block;
+            font-size: 12px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .field input, .field select {
+            width: 100%;
+            border: 1px solid var(--line);
+            background: #fff;
+            color: var(--text);
+            border-radius: 8px;
+            padding: 11px 12px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .field input:focus, .field select:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            border: 0;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 8px;
+            padding: 11px 16px;
+        }
+
+        .btn-ink { background: var(--ink); color: var(--cream); }
+        .btn-ghost { background: transparent; border: 1px solid var(--line); color: var(--muted); }
+
+        @media (max-width: 640px) {
+            .row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="eyebrow">Update registration</div>
+        <h1>Edit lead</h1>
+        <p class="sub">Change details or update status to converted.</p>
+        <div class="reg">{{ lead.registration_id }}</div>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="field">
+                <label for="name">Name</label>
+                <input id="name" type="text" name="name" value="{{ lead.name }}" required>
+            </div>
+            <div class="field">
+                <label for="phone_number">Phone Number</label>
+                <input id="phone_number" type="text" name="phone_number" value="{{ lead.phone_number }}" required>
+            </div>
+            <div class="row">
+                <div class="field">
+                    <label for="attending_members">Members (incl. you)</label>
+                    <input id="attending_members" type="number" name="attending_members" min="1" max="5" value="{{ lead.attending_members }}" required>
+                </div>
+                <div class="field">
+                    <label for="attending_children">Children</label>
+                    <input id="attending_children" type="number" name="attending_children" min="0" max="5" value="{{ lead.attending_children }}" required>
+                </div>
+            </div>
+            <div class="field">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    <option value="pending" {% if lead.status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="converted" {% if lead.status == 'converted' %}selected{% endif %}>Converted</option>
+                </select>
+            </div>
+            <div class="actions">
+                <button class="btn btn-ink" type="submit">Save changes</button>
+                <a class="btn btn-ghost" href="{% url redirect_name %}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

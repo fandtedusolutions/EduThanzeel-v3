@@ -1,0 +1,346 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Tu Kuja</title>
+    <link rel="icon" href="{% static 'admission/images/favicon.ico' %}" sizes="any">
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1b0512;
+            --maroon: #5c0135;
+            --gold: #c9a227;
+            --gold-soft: #e8cd7a;
+            --cream: #faf5ea;
+            --paper: #fffdf8;
+            --line: #eadcc4;
+            --text: #2a1620;
+            --muted: #7a5d68;
+            --sidebar: 250px;
+            --ok: #2f7a4a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Jost', sans-serif;
+            background:
+                radial-gradient(ellipse 80% 40% at 100% 0%, rgba(201, 162, 39, .12), transparent 55%),
+                var(--cream);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .layout { display: flex; min-height: 100vh; }
+
+        .sidebar {
+            width: var(--sidebar);
+            background: linear-gradient(180deg, #1b0512, #33001d);
+            color: var(--cream);
+            padding: 28px 20px;
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            border-right: 3px solid var(--gold);
+        }
+
+        .brand img { height: 34px; width: auto; display: block; }
+
+        .nav-label {
+            margin: 34px 0 10px;
+            font-size: 11px;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--gold-soft);
+        }
+
+        .nav-link {
+            display: block;
+            color: rgba(250, 245, 234, .78);
+            text-decoration: none;
+            padding: 11px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .nav-link:hover { background: rgba(255,255,255,.06); color: var(--cream); }
+        .nav-link.active {
+            background: rgba(201, 162, 39, .16);
+            color: var(--gold-soft);
+            box-shadow: inset 3px 0 0 var(--gold);
+        }
+
+        .sign-out { margin-top: auto; }
+        .sign-out button {
+            width: 100%;
+            background: transparent;
+            border: 1px solid rgba(232, 205, 122, .4);
+            color: var(--gold-soft);
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+        }
+        .sign-out button:hover { background: rgba(201, 162, 39, .12); }
+
+        .main { flex: 1; padding: 28px 36px 40px; min-width: 0; }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .eyebrow {
+            color: var(--gold);
+            font-size: 11px;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .topbar h1 {
+            font-family: 'Marcellus', serif;
+            font-size: 1.85rem;
+            font-weight: 400;
+        }
+
+        .topbar p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+        .user-chip {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 7px 14px 7px 7px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--ink);
+            color: var(--gold-soft);
+            display: grid;
+            place-items: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .user-chip .name { font-size: 13px; font-weight: 600; }
+        .user-chip .role { font-size: 11px; color: var(--muted); }
+
+        .flash {
+            background: #eef8f0;
+            border: 1px solid #b7dfc2;
+            color: var(--ok);
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .stats-secondary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .stat {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-top: 3px solid var(--gold);
+            border-radius: 12px;
+            padding: 18px 20px;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        a.stat:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(27, 5, 18, .08);
+        }
+
+        .stat .label {
+            font-size: 11px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .stat .value {
+            font-family: 'Marcellus', serif;
+            font-size: 2.2rem;
+            margin-top: 8px;
+            color: var(--ink);
+        }
+
+        .stat .hint {
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .card {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 22px;
+        }
+
+        .card h2 {
+            font-family: 'Marcellus', serif;
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            border: 0;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+
+        .btn-ink { background: var(--ink); color: var(--cream); }
+        .btn-gold { background: linear-gradient(135deg, var(--gold-soft), var(--gold)); color: var(--ink); }
+
+        @media (max-width: 980px) {
+            .sidebar { display: none; }
+            .main { padding: 20px 14px; }
+            .stats, .stats-secondary, .quick-links { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <a class="brand" href="{% url 'tukuja' %}">
+                <img src="{% static 'tukuja/edu.png' %}" alt="EduThanzeel">
+            </a>
+            <div class="nav-label">Tu Kuja</div>
+            <a class="nav-link active" href="{% url 'tukuja_dashboard' %}">Dashboard</a>
+            <a class="nav-link" href="{% url 'tukuja_leads' %}">Leads</a>
+            <a class="nav-link" href="{% url 'tukuja_converted' %}">Converted</a>
+            <a class="nav-link" href="{% url 'tukuja_food_batch' %}">Food Batch</a>
+            <a class="nav-link" href="{% url 'tukuja' %}">Event Page</a>
+            <form class="sign-out" action="/admin/logout/" method="post">
+                {% csrf_token %}
+                <button type="submit">Sign Out</button>
+            </form>
+        </aside>
+
+        <main class="main">
+            <header class="topbar">
+                <div>
+                    <div class="eyebrow">Family gathering</div>
+                    <h1>Dashboard</h1>
+                    <p>Overview counts for Tu Kuja, Man Kuja</p>
+                </div>
+                <div class="user-chip">
+                    <div class="avatar">TK</div>
+                    <div>
+                        <div class="name">{{ request.user.username }}</div>
+                        <div class="role">Tu Kuja Dashboard</div>
+                    </div>
+                </div>
+            </header>
+
+            {% if messages %}
+                {% for message in messages %}
+                <div class="flash">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <section class="stats">
+                <article class="stat">
+                    <div class="label">Total</div>
+                    <div class="value">{{ stats.total_count }}</div>
+                    <div class="hint">All registrations</div>
+                </article>
+                <a class="stat" href="{% url 'tukuja_converted' %}">
+                    <div class="label">Converted</div>
+                    <div class="value">{{ stats.converted_count }}</div>
+                    <div class="hint">Confirmed conversions</div>
+                </a>
+                <a class="stat" href="{% url 'tukuja_leads' %}">
+                    <div class="label">Pending</div>
+                    <div class="value">{{ stats.pending_count }}</div>
+                    <div class="hint">Pending registrations</div>
+                </a>
+            </section>
+
+            <section class="stats-secondary">
+                <article class="stat">
+                    <div class="label">Adult</div>
+                    <div class="value">{{ stats.total_members }}</div>
+                </article>
+                <article class="stat">
+                    <div class="label">Children</div>
+                    <div class="value">{{ stats.total_children }}</div>
+                </article>
+                <article class="stat">
+                    <div class="label">Total Attending</div>
+                    <div class="value">{{ stats.total_attending }}</div>
+                </article>
+            </section>
+
+            <section class="quick-links">
+                <div class="card">
+                    <h2>Leads</h2>
+                    <p>{{ stats.pending_count }} pending · {{ stats.pending_members }} members · {{ stats.pending_children }} children</p>
+                    <a class="btn btn-ink" href="{% url 'tukuja_leads' %}">Open leads</a>
+                </div>
+                <div class="card">
+                    <h2>Converted</h2>
+                    <p>{{ stats.converted_count }} converted · {{ stats.converted_members }} members · {{ stats.converted_children }} children</p>
+                    <a class="btn btn-gold" href="{% url 'tukuja_converted' %}">Open converted</a>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

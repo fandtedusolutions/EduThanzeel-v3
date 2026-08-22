@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tu Kuja RSVPs | EduThanzeel</title>
+    <title>{{ page_title }} | Tu Kuja</title>
     <link rel="icon" href="{% static 'admission/images/favicon.ico' %}" sizes="any">
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -20,6 +20,7 @@
             --text: #2a1620;
             --muted: #7a5d68;
             --sidebar: 250px;
+            --ok: #2f7a4a;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -140,6 +141,21 @@
         .user-chip .name { font-size: 13px; font-weight: 600; }
         .user-chip .role { font-size: 11px; color: var(--muted); }
 
+        .flash {
+            background: #eef8f0;
+            border: 1px solid #b7dfc2;
+            color: var(--ok);
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+        .flash.error, .flash-error {
+            background: #fdeeee;
+            border-color: #efc0c0;
+            color: #9a3b4a;
+        }
+
         .stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -209,6 +225,7 @@
         .btn-gold { background: linear-gradient(135deg, var(--gold-soft), var(--gold)); color: var(--ink); }
         .btn-ink { background: var(--ink); color: var(--cream); }
         .btn-ghost { background: transparent; border: 1px solid var(--line); color: var(--muted); }
+        .btn-sm { padding: 6px 10px; font-size: 12px; }
 
         .filters {
             display: grid;
@@ -262,6 +279,7 @@
             padding: 13px 14px;
             border-bottom: 1px solid #f0e6d6;
             font-size: 14px;
+            vertical-align: middle;
         }
         tbody tr:hover { background: #fff8ea; }
         td.name { font-weight: 600; }
@@ -280,9 +298,96 @@
             border-radius: 6px;
             font-size: 13px;
         }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-pending {
+            background: #fff1d6;
+            color: #8a6a12;
+        }
+        .badge-converted {
+            background: #e5f6ea;
+            color: var(--ok);
+        }
+        .actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            height: 32px;
+            padding: 0 11px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .02em;
+            white-space: nowrap;
+            transition: background .2s ease, border-color .2s ease, transform .15s ease;
+        }
+
+        .action-btn svg {
+            width: 13px;
+            height: 13px;
+            flex-shrink: 0;
+        }
+
+        .action-btn:hover { transform: translateY(-1px); }
+
+        .action-edit {
+            background: #f7efe0;
+            border-color: #eadcc4;
+            color: var(--maroon);
+        }
+        .action-edit:hover { background: #f0e4cf; }
+
+        .action-convert {
+            background: #e8f6ee;
+            border-color: #b9dfc6;
+            color: var(--ok);
+        }
+        .action-convert:hover { background: #d9f0e2; }
+
+        .action-pending {
+            background: #fff4dc;
+            border-color: #edd9a8;
+            color: #8a6a12;
+        }
+        .action-pending:hover { background: #ffe9be; }
+
+        .action-delete {
+            background: #fceeee;
+            border-color: #efc4c4;
+            color: #9a3b4a;
+        }
+        .action-delete:hover { background: #f8dfdf; }
+
+        .wp-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: #25d366;
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            flex-shrink: 0;
+            transition: background .2s ease, transform .15s ease;
+        }
+        .wp-btn:hover { background: #1ebe57; transform: translateY(-1px); }
+        .wp-btn svg { width: 15px; height: 15px; fill: currentColor; }
         .empty { text-align: center; padding: 48px 12px; color: var(--muted); }
-        .delete { color: #9a3b4a; text-decoration: none; font-size: 13px; font-weight: 500; }
-        .delete:hover { text-decoration: underline; }
 
         .pager {
             display: flex;
@@ -312,6 +417,81 @@
         .pages .active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
         .pages .disabled { opacity: .4; }
 
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(27, 5, 18, .55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal-card {
+            width: min(420px, 100%);
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-top: 3px solid var(--gold);
+            border-radius: 16px;
+            padding: 28px 24px 22px;
+            box-shadow: 0 24px 60px rgba(27, 5, 18, .28);
+            text-align: center;
+            animation: modalIn .22s ease;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(12px) scale(.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .modal-eyebrow {
+            color: var(--gold);
+            font-size: 11px;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .modal-card h3 {
+            font-family: 'Marcellus', serif;
+            font-size: 1.35rem;
+            font-weight: 400;
+            color: var(--ink);
+            margin-bottom: 10px;
+        }
+
+        .modal-card p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        .modal-id {
+            display: inline-block;
+            margin-bottom: 14px;
+            padding: 5px 12px;
+            border: 1px solid var(--gold);
+            color: var(--maroon);
+            font-family: 'Marcellus', serif;
+            letter-spacing: .08em;
+            font-size: 14px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .modal-actions .btn { min-width: 110px; }
+        .btn-danger { background: #9a3b4a; color: #fff; }
+
         @media (max-width: 1200px) {
             .filters { grid-template-columns: 1fr 1fr 1fr 1fr; }
             .stats { grid-template-columns: 1fr 1fr; }
@@ -331,7 +511,10 @@
                 <img src="{% static 'tukuja/edu.png' %}" alt="EduThanzeel">
             </a>
             <div class="nav-label">Tu Kuja</div>
-            <a class="nav-link active" href="{% url 'tukuja_dashboard' %}">RSVP Dashboard</a>
+            <a class="nav-link {% if nav_page == 'dashboard' %}active{% endif %}" href="{% url 'tukuja_dashboard' %}">Dashboard</a>
+            <a class="nav-link {% if nav_page == 'leads' %}active{% endif %}" href="{% url 'tukuja_leads' %}">Leads</a>
+            <a class="nav-link {% if nav_page == 'converted' %}active{% endif %}" href="{% url 'tukuja_converted' %}">Converted</a>
+            <a class="nav-link {% if nav_page == 'food_batch' %}active{% endif %}" href="{% url 'tukuja_food_batch' %}">Food Batch</a>
             <a class="nav-link" href="{% url 'tukuja' %}">Event Page</a>
             <form class="sign-out" action="/admin/logout/" method="post">
                 {% csrf_token %}
@@ -343,8 +526,14 @@
             <header class="topbar">
                 <div>
                     <div class="eyebrow">Family gathering</div>
-                    <h1>Tu Kuja, Man Kuja</h1>
-                    <p>RSVP submissions for this event only</p>
+                    <h1>{{ page_title }}</h1>
+                    <p>
+                        {% if status_value == 'converted' %}
+                            Converted leads for Tu Kuja, Man Kuja
+                        {% else %}
+                            Pending leads for Tu Kuja, Man Kuja
+                        {% endif %}
+                    </p>
                 </div>
                 <div class="user-chip">
                     <div class="avatar">TK</div>
@@ -355,10 +544,16 @@
                 </div>
             </header>
 
+            {% if messages %}
+                {% for message in messages %}
+                <div class="flash {% if message.tags == 'error' %}error{% endif %}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
             <section class="stats">
                 <article class="stat">
-                    <div class="label">RSVPs</div>
-                    <div class="value">{{ stats.total_rsvps }}</div>
+                    <div class="label">{% if status_value == 'converted' %}Converted{% else %}Pending{% endif %}</div>
+                    <div class="value">{{ stats.total_leads }}</div>
                 </article>
                 <article class="stat">
                     <div class="label">Members</div>
@@ -376,8 +571,11 @@
 
             <section class="panel">
                 <div class="panel-head">
-                    <h2>Form submissions ({{ rsvps.paginator.count }})</h2>
-                    <a class="btn btn-gold" href="{% url 'export_tukuja_excel' %}?{{ querystring }}">Export Excel</a>
+                    <h2>
+                        {% if status_value == 'converted' %}Converted{% else %}Leads{% endif %}
+                        ({{ leads.paginator.count }})
+                    </h2>
+                    <a class="btn btn-gold" href="{% url 'export_tukuja_excel' %}?status={{ status_value }}&{{ querystring }}">Export Excel</a>
                 </div>
 
                 <form method="GET" class="filters">
@@ -441,7 +639,7 @@
                     <div class="filter-actions">
                         <button class="btn btn-ink" type="submit">Filter</button>
                         {% if has_filters or filters.sort != '-created_at' %}
-                        <a class="btn btn-ghost" href="{% url 'tukuja_dashboard' %}">Clear</a>
+                        <a class="btn btn-ghost" href="{% if status_value == 'converted' %}{% url 'tukuja_converted' %}{% else %}{% url 'tukuja_leads' %}{% endif %}">Clear</a>
                         {% endif %}
                     </div>
                 </form>
@@ -456,25 +654,65 @@
                                 <th>Members</th>
                                 <th>Children</th>
                                 <th>Total</th>
+                                <th>Batch</th>
+                                <th>Status</th>
                                 <th>Submitted</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for rsvp in rsvps %}
+                            {% for lead in leads %}
                             <tr>
-                                <td class="reg">{{ rsvp.registration_id }}</td>
-                                <td class="name">{{ rsvp.name }}</td>
-                                <td><span class="phone">{{ rsvp.phone_number }}</span></td>
-                                <td>{{ rsvp.attending_members }}</td>
-                                <td>{{ rsvp.attending_children }}</td>
-                                <td class="total">{{ rsvp.total_attending }}</td>
-                                <td>{{ rsvp.created_at|date:"M d, Y g:i A" }}</td>
-                                <td><a class="delete" href="{% url 'delete_tukuja_rsvp' rsvp.pk %}" onclick="return confirm('Delete this RSVP?');">Delete</a></td>
+                                <td class="reg">{{ lead.registration_id }}</td>
+                                <td class="name">{{ lead.name }}</td>
+                                <td><span class="phone">{{ lead.phone_number }}</span></td>
+                                <td>{{ lead.attending_members }}</td>
+                                <td>{{ lead.attending_children }}</td>
+                                <td class="total">{{ lead.total_attending }}</td>
+                                <td>{% if lead.food_batch %}Batch {{ lead.food_batch }}{% else %}—{% endif %}</td>
+                                <td>
+                                    {% if lead.status == 'converted' %}
+                                    <span class="badge badge-converted">Converted</span>
+                                    {% else %}
+                                    <span class="badge badge-pending">Pending</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ lead.created_at|date:"M d, Y g:i A" }}</td>
+                                <td>
+                                    <div class="actions">
+                                        {% if show_whatsapp %}
+                                        <a class="wp-btn" href="{{ lead.whatsapp_url }}" target="_blank" rel="noopener" title="Send coupon image on WhatsApp">
+                                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.9 11.9 0 0 0 12.1 0C5.5 0 .1 5.4.1 12c0 2.1.6 4.2 1.6 6L0 24l6.2-1.6A11.9 11.9 0 0 0 12.1 24C18.7 24 24.1 18.6 24.1 12S18.7 0 12.1 0zm0 0A11.9 11.9 0 0 1 24 12c0 6.6-5.4 12-12 12a11.9 11.9 0 0 1-5.7-1.5L1.6 24l1.6-4.7A11.9 11.9 0 0 1 0 12C0 5.4 5.4 0 12 0a11.9 11.9 0 0 1 8.5 3.5zM17.5 14.4c-.3-.1-1.6-.8-1.8-.9-.2-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.1-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.8 4.4 3.9 1.6.7 2 .7 2.7.6.4-.1 1.6-.6 1.8-1.3.2-.6.2-1.2.1-1.3-.1-.1-.3-.2-.6-.3z"/></svg>
+                                        </a>
+                                        <a class="action-btn action-edit" href="{% url 'tukuja_coupon' lead.registration_id %}" title="View coupon" target="_blank" rel="noopener">
+                                            Coupon
+                                        </a>
+                                        {% endif %}
+                                        <a class="action-btn action-edit" href="{% url 'edit_tukuja_lead' lead.pk %}" title="Edit">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+                                            Edit
+                                        </a>
+                                        {% if lead.status == 'pending' %}
+                                        <a class="action-btn action-convert js-confirm" href="{% url 'mark_tukuja_converted' lead.pk %}" data-title="Mark as converted" data-message="Move this lead to the Converted list?" data-id="{{ lead.registration_id }}" data-confirm="Convert" data-tone="ok" title="Convert">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg>
+                                            Convert
+                                        </a>
+                                        {% else %}
+                                        <a class="action-btn action-pending js-confirm" href="{% url 'mark_tukuja_pending' lead.pk %}" data-title="Move to leads" data-message="Move this registration back to Leads?" data-id="{{ lead.registration_id }}" data-confirm="Move" data-tone="ok" title="Pending">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h18M3 12l5-5M3 12l5 5"/></svg>
+                                            Pending
+                                        </a>
+                                        {% endif %}
+                                        <a class="action-btn action-delete js-confirm" href="{% url 'delete_tukuja_rsvp' lead.pk %}" data-title="Delete registration" data-message="This will permanently remove the registration." data-id="{{ lead.registration_id }}" data-confirm="Delete" data-tone="danger" title="Delete">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+                                            Delete
+                                        </a>
+                                    </div>
+                                </td>
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="8" class="empty">No RSVPs match these filters.</td>
+                                <td colspan="10" class="empty">{{ empty_message }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -483,27 +721,27 @@
 
                 <div class="pager">
                     <div class="pager-meta">
-                        {% if rsvps.paginator.count %}
-                            Showing {{ rsvps.start_index }}–{{ rsvps.end_index }} of {{ rsvps.paginator.count }} · 25 per page
+                        {% if leads.paginator.count %}
+                            Showing {{ leads.start_index }}–{{ leads.end_index }} of {{ leads.paginator.count }} · 25 per page
                         {% else %}
                             0 results · 25 per page
                         {% endif %}
                     </div>
                     <nav class="pages">
-                        {% if rsvps.has_previous %}
-                            <a href="?page={{ rsvps.previous_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">Previous</a>
+                        {% if leads.has_previous %}
+                            <a href="?page={{ leads.previous_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">Previous</a>
                         {% else %}
                             <span class="disabled">Previous</span>
                         {% endif %}
-                        {% for i in rsvps.paginator.page_range %}
-                            {% if rsvps.number == i %}
+                        {% for i in leads.paginator.page_range %}
+                            {% if leads.number == i %}
                                 <span class="active">{{ i }}</span>
                             {% else %}
                                 <a href="?page={{ i }}{% if querystring %}&{{ querystring }}{% endif %}">{{ i }}</a>
                             {% endif %}
                         {% endfor %}
-                        {% if rsvps.has_next %}
-                            <a href="?page={{ rsvps.next_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">Next</a>
+                        {% if leads.has_next %}
+                            <a href="?page={{ leads.next_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">Next</a>
                         {% else %}
                             <span class="disabled">Next</span>
                         {% endif %}
@@ -512,6 +750,63 @@
             </section>
         </main>
     </div>
+
+    <div class="modal-overlay" id="confirmModal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-eyebrow">Please confirm</div>
+            <div class="modal-id" id="modalId"></div>
+            <h3 id="modalTitle">Confirm action</h3>
+            <p id="modalMessage">Are you sure?</p>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-ghost" id="modalCancel">Cancel</button>
+                <a href="#" class="btn btn-ink" id="modalConfirm">Confirm</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const overlay = document.getElementById('confirmModal');
+            const titleEl = document.getElementById('modalTitle');
+            const messageEl = document.getElementById('modalMessage');
+            const idEl = document.getElementById('modalId');
+            const cancelBtn = document.getElementById('modalCancel');
+            const confirmBtn = document.getElementById('modalConfirm');
+
+            function openModal(link) {
+                titleEl.textContent = link.dataset.title || 'Confirm action';
+                messageEl.textContent = link.dataset.message || 'Are you sure?';
+                idEl.textContent = link.dataset.id || '';
+                idEl.style.display = link.dataset.id ? 'inline-block' : 'none';
+                confirmBtn.textContent = link.dataset.confirm || 'Confirm';
+                confirmBtn.href = link.getAttribute('href');
+                confirmBtn.className = 'btn ' + (link.dataset.tone === 'danger' ? 'btn-danger' : 'btn-ink');
+                overlay.classList.add('open');
+                overlay.setAttribute('aria-hidden', 'false');
+            }
+
+            function closeModal() {
+                overlay.classList.remove('open');
+                overlay.setAttribute('aria-hidden', 'true');
+                confirmBtn.href = '#';
+            }
+
+            document.querySelectorAll('.js-confirm').forEach(function (link) {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    openModal(link);
+                });
+            });
+
+            cancelBtn.addEventListener('click', closeModal);
+            overlay.addEventListener('click', function (e) {
+                if (e.target === overlay) closeModal();
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+            });
+        })();
+    </script>
 </body>
 
 </html>
