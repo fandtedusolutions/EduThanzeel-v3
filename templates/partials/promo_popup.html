@@ -1,0 +1,118 @@
+{% load static %}
+
+<div class="promo-popup" id="promo-popup" role="dialog" aria-label="EduThanzeel announcement" aria-live="polite">
+    <button class="promo-popup__close" type="button" aria-label="Close announcement" data-promo-close>&times;</button>
+    <a class="promo-popup__link" href="{% url 'tukuja' %}" aria-label="Open Tukuja page">
+        <img class="promo-popup__image" src="{% static 'tukuja/image.png' %}" alt="EduThanzeel announcement">
+    </a>
+</div>
+
+<style>
+    .promo-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        z-index: 1050;
+        width: min(460px, calc(100vw - 32px));
+        max-height: calc(100vh - 32px);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+        transform: translate(-50%, -50%);
+        animation: promo-popup-in 1.2s cubic-bezier(0.22, 0.8, 0.2, 1) both;
+        transition: top 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+            right 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+            bottom 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+            left 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+            width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+            transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+            box-shadow 0.45s ease;
+        will-change: transform, opacity;
+    }
+
+    .promo-popup.is-docked {
+        top: auto !important;
+        right: 16px !important;
+        bottom: 16px !important;
+        left: auto !important;
+        width: min(280px, calc(100vw - 32px));
+        transform: none !important;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+    }
+
+    .promo-popup__image {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: calc(100vh - 32px);
+        object-fit: contain;
+    }
+
+    .promo-popup__link {
+        display: block;
+    }
+
+    .promo-popup__close {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 1;
+        display: grid;
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.65);
+        cursor: pointer;
+        font-size: 24px;
+        line-height: 1;
+        place-items: center;
+    }
+
+    .promo-popup__close:hover,
+    .promo-popup__close:focus-visible {
+        background: #000;
+    }
+
+    .promo-popup.is-hidden {
+        display: none;
+    }
+
+    @keyframes promo-popup-in {
+        0% {
+            opacity: 0;
+            transform: translate(-50%, -47%) scale(0.86);
+        }
+        65% {
+            opacity: 0.92;
+            transform: translate(-50%, -50%) scale(1.015);
+        }
+        100% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+
+    @media (max-width: 576px) {
+        .promo-popup.is-docked {
+            right: 12px !important;
+            bottom: 12px !important;
+            width: min(240px, calc(100vw - 32px));
+        }
+    }
+</style>
+
+<script>
+    (() => {
+        const popup = document.getElementById('promo-popup');
+        const closeButton = popup?.querySelector('[data-promo-close]');
+
+        closeButton?.addEventListener('click', () => {
+            popup.classList.add('is-docked');
+        });
+    })();
+</script>
