@@ -42,6 +42,6 @@ class RsvpSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         members = attrs.get('attending_members') or 0
         children = attrs.get('attending_children') or 0
-        if members + children > 5:
-            raise serializers.ValidationError('Only 5 members allowed.')
+        if members + children > 10:
+            raise serializers.ValidationError('Only 10 attendees allowed.')
         return attrs

@@ -1689,7 +1689,7 @@ background-repeat: no-repeat;
         <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6">
             <path d="M12 21s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z" />
             <circle cx="12" cy="9" r="2.4" />
-          </svg>Capkon,Calicut</span>
+          </svg>Capkone City Convention Centre, Calicut</span>
       </div>
       <p class="hero-sub">Tu Kuja Man Kuja - a heartfelt evening of Madh, Qasida and love for the Beloved ﷺ, thoughtfully brought together for every EduThanzeel team member and their family.</p>
 
@@ -1755,7 +1755,7 @@ background-repeat: no-repeat;
 </div>
               
           <h4>Refined Hospitality</h4>
-          <p>Thoughtful refreshments and a warm meal shared in a spirit of quiet camaraderie at the Capkon City Convention Centre.</p>
+          <p>Thoughtful refreshments and a warm meal shared in a spirit of quiet camaraderie at the Capkone City Convention Centre, Calicut.</p>
         </div>
         <div class="expect-card">
                   <div class="icon" style="width:80px;height:100px;">
@@ -1866,7 +1866,7 @@ for(let i=0;i<COUNT;i++){
         </div>
         <div class="detail-card">
           <div class="label">Venue</div>
-          <div class="value">Capkon,Calicut</div>
+          <div class="value">Capkone City Convention Centre, Calicut</div>
         </div>
      
       </div>
@@ -1902,14 +1902,14 @@ for(let i=0;i<COUNT;i++){
           <div class="form-row">
             <div class="field">
               <label for="members">Attending Members (incl. you)</label>
-              <input type="number" id="members" name="attending_members" min="1" max="5" value="1" required>
+              <input type="number" id="members" name="attending_members" min="1" max="10" value="1" required>
             </div>
             <div class="field">
               <label for="children">Attending Children</label>
-              <input type="number" id="children" name="attending_children" min="0" max="4" value="0" required>
+              <input type="number" id="children" name="attending_children" min="0" max="9" value="0" required>
             </div>
           </div>
-          <p class="guest-limit-hint">Total of members + children cannot be more than 5.</p>
+          <p class="guest-limit-hint">Total of members + children cannot be more than 10.</p>
           <button type="submit" class="btn btn-gold" id="rsvpSubmit">Submit</button>
           <div class="form-msg" id="formMsg"></div>
         </form>
@@ -2000,7 +2000,7 @@ where souls resonate as one.</p>
     const membersInput = document.getElementById('members');
     const childrenInput = document.getElementById('children');
     const phoneInput = document.getElementById('phone');
-    const MAX_GUESTS = 5;
+    const MAX_GUESTS = 10;
 
     function digitsOnly(value) {
       return String(value || '').replace(/\D/g, '');
@@ -2027,12 +2027,12 @@ where souls resonate as one.</p>
     });
 
     function showLimitError() {
-      formMsg.textContent = 'Only 5 members allowed.';
+      formMsg.textContent = 'Only 10 attendees allowed.';
       formMsg.style.color = '#e07a7a';
     }
 
     function clearLimitError() {
-      if (formMsg.textContent === 'Only 5 members allowed.') {
+      if (formMsg.textContent === 'Only 10 attendees allowed.') {
         formMsg.textContent = '';
       }
     }
@@ -2047,13 +2047,6 @@ where souls resonate as one.</p>
       if (children < 0) children = 0;
 
       if (members + children > MAX_GUESTS) {
-        if (changed === 'members') {
-          members = Math.max(1, MAX_GUESTS - children);
-        } else {
-          children = Math.max(0, MAX_GUESTS - members);
-        }
-        membersInput.value = members;
-        childrenInput.value = children;
         showLimitError();
       } else {
         membersInput.value = members;
@@ -2062,12 +2055,15 @@ where souls resonate as one.</p>
       }
 
       membersInput.max = MAX_GUESTS;
-      childrenInput.max = Math.max(0, MAX_GUESTS - members);
+        childrenInput.max = MAX_GUESTS;
     }
 
-    membersInput.addEventListener('input', () => enforceGuestLimit('members'));
+    membersInput.addEventListener('input', () => {
+      if (Number(membersInput.value) > MAX_GUESTS) {
+        membersInput.value = MAX_GUESTS;
+      }
+    });
     membersInput.addEventListener('change', () => enforceGuestLimit('members'));
-    childrenInput.addEventListener('input', () => enforceGuestLimit('children'));
     childrenInput.addEventListener('change', () => enforceGuestLimit('children'));
     enforceGuestLimit('children');
 

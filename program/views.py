@@ -384,8 +384,8 @@ def edit_tukuja_lead(request, pk):
             error = 'Attending members must be at least 1.'
         elif children < 0:
             error = 'Children count cannot be negative.'
-        elif members + children > 5:
-            error = 'Only 5 members allowed.'
+        elif members + children > 10:
+            error = 'Only 10 attendees allowed.'
         elif new_status not in (Rsvp.STATUS_PENDING, Rsvp.STATUS_CONVERTED):
             error = 'Invalid status.'
         else:
