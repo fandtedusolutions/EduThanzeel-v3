@@ -534,7 +534,6 @@
         % comment %
       }
 
-      border: 1px solid var(--gold);
 
         {
         % endcomment %
@@ -643,7 +642,6 @@
         % comment %
       }
 
-      background: var(--ink);
 
         {
         % endcomment %
@@ -1628,6 +1626,7 @@
     .guest-photo-wrap {
       position: relative;
       width: 100%;
+      background-size: cover;
       height: 380px;
       margin-bottom: 20px;
     }
@@ -1695,8 +1694,7 @@
         % comment %
       }
 
-      font-family:'Cormorant Garamond',
-      serif;
+          font-family: 'Marcellus', serif;
 
         {
         % endcomment %
@@ -1704,6 +1702,7 @@
 
       font-weight:500;
       font-size: 20px;
+      text-transform:uppercase;
       color: var(--cream);
       letter-spacing: 0.02em;
       line-height:1.3;
@@ -1755,13 +1754,16 @@
       }
 
       .guest-grid {
-        grid-template-columns: 1fr;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
         gap: 32px 16px;
         padding: 0 12px;
       }
 
       .guest-photo-wrap {
-        height: 260px;
+        height: 300px;
       }
 
       .guest-name {
@@ -1972,17 +1974,17 @@
       { name: "Sayyid Sadiq Ali Shihab Thangal", role: "Panakkad Sayyid; President, Kerala State Committee, IUML; Chancellor, Darul Huda Islamic University", photo: "{% static 'tukuja/gust/Sayyid Sadiq Ali Shihab Thangal (2).png' %}" },
       { name: "Sayyid Ibraheem Khaleel Al Bukhari", role: "Belonging to the distinguished Bukhari family lineage", photo: "{% static 'tukuja/gust/Ibraheem Khaleel.png' %}" },
 
-      { name: "Sayyid Abbas Ali Shihab Thangal", role: "Esteemed member of the Panakkad Pukkoya Thangal family", photo: "{% static 'tukuja/gust/abbasali.png' %}" },
+      { name: "Sayyid Abbas Ali Shihab Thangal", role: "Esteemed member of the Panakkad Pukkoya Thangal family", photo: "{% static 'tukuja/shb.png' %}" },
       { name: "SAYYID  ABDULLAH  HABEEB  AL BUKHARI", role: "Distinguished member of the Bukhari Thangal lineage", photo: "{% static 'tukuja/gust/ABDULLAH HABEEB.png' %}" },
 
-      { name: "Sayyid Munavvar Ali Shihab Thangal", role: "Prominent member of the Panakkad family; Muslim Youth League Kerala & IUML National Committee", photo: "{% static 'tukuja/gust/munavvar (1).png' %}" },
+      { name: "Sayyid Munavvar Ali Shihab Thangal", role: "Prominent member of the Panakkad family; Muslim Youth League Kerala & IUML National Committee", photo: "{% static 'tukuja/mnv.png' %}" },
       { name: "SAYYID HAMEEDALI SHIHAB THANGAL", role: "Prominent religious and community leader from Kerala; member of the influential Panakkad Pukkoya family of Malappuram", photo: "{% static 'tukuja/gust/HAMEEDALI.png' %}" },
-      { name: "SAYYID RASHEEDALI THANGAL", role: "Influential personality from Kerala; former chairman of the Kerala State Waqf Board", photo: "{% static 'tukuja/gust/RASHEEDALI.png' %}" },
-      { name: "Syed ibraz ahmed hussaini", role: "Custodian of the holy relics", photo: "{% static 'tukuja/gust/sayy.png' %}" },
+      { name: "SAYYID RASHEEDALI<br> THANGAL", role: "Influential personality from Kerala; former chairman of the Kerala State Waqf Board", photo: "{% static 'tukuja/gust/RASHEEDALI.png' %}" },
+      { name: "Syed ibraz ahmed <br>hussaini", role: "Custodian of the holy relics", photo: "{% static 'tukuja/abd.png' %}" },
 
     ];
 
-    const guestBg = "{% static 'tukuja/gust/bg-guest.webp' %}";
+    const guestBg = "{% static 'tukuja/bggggg.webp' %}";
 
     const grid = document.getElementById('guestGrid');
     grid.innerHTML = guests.map(g => `
@@ -2123,6 +2125,33 @@
     </div>
   </footer>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
   <script>
     // Entry gate: unlocks audio playback on first user gesture, then reveals the page
     const entryGate = document.getElementById('entryGate');
