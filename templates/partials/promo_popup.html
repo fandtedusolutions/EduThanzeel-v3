@@ -15,9 +15,9 @@
     <div class="promo-popup__panel">
                     <p class="promo-popup__by">EduThanzeel presents</p>
 
-<img src="{% static 'tukuja/logo-tukujamankuja.png' %}"
+<img src="{% static 'tukuja/logo-tukujamankuja.png' %}" class="pop_up_logo"
      alt="EduThanzeel"
-     style="width:100%; height:200px; object-fit:contain;animation: logoBreath 5s ease-in-out 2.5s infinite;"> 
+     > 
         {% comment %} <h2 class="promo-popup__title">Tu Kuja<br>Man Kuja</h2> {% endcomment %}
         <p class="promo-popup__tagline">An evening of Madh, Qasida &amp; love for the Beloved ﷺ</p>
         <div class="display:flex;align-items:center;justify-content:center;">
@@ -51,7 +51,9 @@
         --tk-cream: #FFFBF1;
     }
 
-
+.pop_up_logo{
+width:100%; height:200px; object-fit:contain;animation: logoBreath 5s ease-in-out 2.5s infinite;
+}
     @keyframes rotateShape {
     from {
         transform: rotate(0deg);
@@ -331,7 +333,9 @@
         .promo-popup__title { font-size: 2.2rem; }
         .promo-popup__cta { align-self: center; }
 
-        
+        .pop_up_logo{
+ height:115px;
+}
 
         .promo-popup__by {
 font-size:20px!important;
